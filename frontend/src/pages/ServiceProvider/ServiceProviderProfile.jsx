@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ServiceProviderNavbar from '../../components/ServiceProviderNavbar';
+import { API_BASE_URL } from '../../config/api.js';
 import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaPhoneAlt, FaHome, FaMapMarkerAlt, FaGlobe, FaHashtag, FaSave, FaCamera } from 'react-icons/fa';
 
@@ -14,7 +15,7 @@ function ServiceProviderProfile() {
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
     if (!token) return setLoading(false);
-    axios.get('http://localhost:5000/api/users/me', {
+    axios.get(`${API_BASE_URL}/api/users/me`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
       setProfile({
@@ -37,14 +38,14 @@ function ServiceProviderProfile() {
   const handleSave = async () => {
     const token = localStorage.getItem('agrochain-token');
     try {
-      await axios.put('http://localhost:5000/api/users/me', profile, {
+      await axios.put(`${API_BASE_URL}/api/users/me`, profile, {
         headers: { Authorization: `Bearer ${token}` }
       }).catch(() => {});
 
       if (avatarFile) {
         const fd = new FormData();
         fd.append('avatar', avatarFile);
-        await axios.post('http://localhost:5000/api/users/me/avatar', fd, {
+        await axios.post(`${API_BASE_URL}/api/users/me/avatar`, fd, {
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
         }).catch(() => {});
       }

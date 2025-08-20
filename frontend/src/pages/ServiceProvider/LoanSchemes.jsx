@@ -4,6 +4,7 @@ import ServiceProviderNavbar from '../../components/ServiceProviderNavbar';
 import { LanguageContext } from '../../App';
 import { motion } from 'framer-motion';
 import { FaFileAlt, FaPlus, FaCalendarAlt, FaPercentage, FaRupeeSign, FaClock, FaShieldAlt, FaGift, FaExternalLinkAlt, FaUpload, FaTimes, FaDownload } from 'react-icons/fa';
+import { API_BASE_URL } from '../../config/api.js';
 
 const translations = {
   en: {
@@ -109,7 +110,7 @@ function LoanSchemes() {
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
     if (token) {
-      axios.get('http://localhost:5000/api/users/me', {
+      axios.get(`${API_BASE_URL}/api/users/me`, {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => {
@@ -126,7 +127,7 @@ function LoanSchemes() {
   const fetchSchemes = async () => {
     try {
       const token = localStorage.getItem('agrochain-token');
-      const response = await axios.get('http://localhost:5000/api/loan-schemes/all', {
+      const response = await axios.get(`${API_BASE_URL}/api/loan-schemes/all`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSchemes(response.data);
@@ -182,7 +183,7 @@ function LoanSchemes() {
         formDataToSend.append('brochure', brochureFile);
       }
 
-      await axios.post('http://localhost:5000/api/loan-schemes/add', formDataToSend, {
+      await axios.post(`${API_BASE_URL}/api/loan-schemes/add`, formDataToSend, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -335,7 +336,7 @@ function LoanSchemes() {
                           </div>
                           {scheme.brochure && (
                             <a 
-                              href={`http://localhost:5000/${scheme.brochure}`} 
+                              href={`${API_BASE_URL}/${scheme.brochure}`} 
                               target="_blank" 
                               rel="noopener noreferrer"
                               className="btn btn-outline-primary btn-sm"

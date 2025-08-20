@@ -4,6 +4,7 @@ import ServiceProviderNavbar from '../../components/ServiceProviderNavbar';
 import { LanguageContext } from '../../App';
 import { motion } from 'framer-motion';
 import { FaFileAlt, FaPlus, FaCalendarAlt, FaPercentage, FaRupeeSign, FaClock, FaShieldAlt, FaGift, FaExternalLinkAlt, FaUpload, FaTimes } from 'react-icons/fa';
+import { API_BASE_URL } from '../../config/api.js';
 
 function ServiceProviderLoanSchemes() {
   const [schemes, setSchemes] = useState([]);
@@ -20,13 +21,13 @@ function ServiceProviderLoanSchemes() {
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
     // Get current service provider's designation
-    axios.get('http://localhost:5000/api/users/me', {
+    axios.get(`${API_BASE_URL}/api/users/me`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
       setDesignation(res.data.designation || '');
     }).catch(() => setDesignation(''));
 
-    axios.get('http://localhost:5000/api/loan-schemes/all', {
+    axios.get(`${API_BASE_URL}/api/loan-schemes/all`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setSchemes(res.data)).catch(() => setSchemes([]));
   }, []);
@@ -50,7 +51,7 @@ function ServiceProviderLoanSchemes() {
       else fd.append(k, v);
     });
     try {
-      await axios.post('http://localhost:5000/api/loan-schemes/add', fd, {
+      await axios.post(`${API_BASE_URL}/api/loan-schemes/add`, fd, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
       });
       setMessage('Loan scheme uploaded!');
@@ -258,7 +259,7 @@ function ServiceProviderLoanSchemes() {
                     <div className="mb-1"><b>Required Documents:</b> {Array.isArray(s.requiredDocuments) ? s.requiredDocuments.join(', ') : s.requiredDocuments}</div>
                     <div className="mb-1 d-flex align-items-center" style={{ gap: 6 }}>
                       <b>Brochure:</b> {s.brochure ? (
-                        <a href={`http://localhost:5000/${s.brochure}`} target="_blank" rel="noopener noreferrer" className="d-inline-flex align-items-center">
+                        <a href={`${API_BASE_URL}/${s.brochure}`} target="_blank" rel="noopener noreferrer" className="d-inline-flex align-items-center">
                           <FaExternalLinkAlt className="me-1" /> Download PDF
                         </a>
                       ) : '-'}

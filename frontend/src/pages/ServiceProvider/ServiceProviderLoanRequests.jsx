@@ -6,6 +6,7 @@ import ServiceProviderNavbar from '../../components/ServiceProviderNavbar';
 import { LanguageContext } from '../../App';
 import { motion } from 'framer-motion';
 import { FaFileContract, FaEye, FaCheck, FaTimes, FaCalendarAlt, FaUser, FaPhone, FaMapMarkerAlt, FaRupeeSign, FaClock, FaInfoCircle, FaUpload, FaImage, FaFileAlt, FaPhoneAlt } from 'react-icons/fa';
+import { API_BASE_URL } from '../../config/api.js';
 
 const translations = {
   en: {
@@ -122,7 +123,7 @@ function ServiceProviderLoanRequests() {
       setLoans([]);
       return;
     }
-    axios.get('http://localhost:5000/api/loans/all', {
+    axios.get(`${API_BASE_URL}/api/loans/all`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -189,7 +190,7 @@ function ServiceProviderLoanRequests() {
     const token = localStorage.getItem('agrochain-token');
     // Save field visit details to loan (but do not approve yet)
     await axios.put(
-      `http://localhost:5000/api/loans/field-visit/${fieldVisitModal.loanId}`,
+      `${API_BASE_URL}/api/loans/field-visit/${fieldVisitModal.loanId}`,
       {
         visitDate,
         officerName,
@@ -222,12 +223,12 @@ function ServiceProviderLoanRequests() {
     // Determine which approval route to use based on status and designation
     let url = '';
     if (approveModal.loan.status === 'ngo_approved' && userDesignation === 'Loan Officer') {
-      url = `http://localhost:5000/api/loans/approve/${approveModal.loan._id}`;
+      url = `${API_BASE_URL}/api/loans/approve/${approveModal.loan._id}`;
     } else if (approveModal.loan.status === 'pending' && userDesignation === 'NGO Field Coordinator') {
-      url = `http://localhost:5000/api/loans/ngo-approve/${approveModal.loan._id}`;
+      url = `${API_BASE_URL}/api/loans/ngo-approve/${approveModal.loan._id}`;
     } else {
       // Should not happen, but fallback to ngo-approve
-      url = `http://localhost:5000/api/loans/ngo-approve/${approveModal.loan._id}`;
+      url = `${API_BASE_URL}/api/loans/ngo-approve/${approveModal.loan._id}`;
     }
     await axios.put(
       url,
@@ -251,7 +252,7 @@ function ServiceProviderLoanRequests() {
 
   const handleReject = async (id) => {
     const token = localStorage.getItem('agrochain-token');
-    await axios.put(`http://localhost:5000/api/loans/reject/${id}`, {}, {
+    await axios.put(`${API_BASE_URL}/api/loans/reject/${id}`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     });
     fetchLoans();
@@ -271,7 +272,7 @@ function ServiceProviderLoanRequests() {
     if (ngoMessage) formData.append('ngoMessage', ngoMessage);
 
     await axios.put(
-      `http://localhost:5000/api/loans/ngo-approve/${ngoApproveModal.loan._id}`,
+      `${API_BASE_URL}/api/loans/ngo-approve/${ngoApproveModal.loan._id}`,
       formData,
       { 
         headers: { 
@@ -295,7 +296,7 @@ function ServiceProviderLoanRequests() {
   const confirmNgoReject = async () => {
     const token = localStorage.getItem('agrochain-token');
     await axios.put(
-      `http://localhost:5000/api/loans/ngo-reject/${ngoRejectModal.loan._id}`,
+      `${API_BASE_URL}/api/loans/ngo-reject/${ngoRejectModal.loan._id}`,
       { rejectionReason },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -308,7 +309,7 @@ function ServiceProviderLoanRequests() {
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
     if (token) {
-      axios.get('http://localhost:5000/api/users/me', {
+      axios.get(`${API_BASE_URL}/api/users/me`, {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => {
@@ -409,7 +410,7 @@ function ServiceProviderLoanRequests() {
                       {loan.document && (
                         <div className="mb-2">
                           <b>{translations[language].document}:</b>{' '}
-                          <a href={`http://localhost:5000/${loan.document}`} target="_blank" rel="noopener noreferrer" className="d-inline-flex align-items-center">
+                          <a href={`${API_BASE_URL}/${loan.document}`} target="_blank" rel="noopener noreferrer" className="d-inline-flex align-items-center">
                             <FaEye className="me-1" /> {translations[language].viewDoc}
                           </a>
                         </div>
@@ -477,7 +478,7 @@ function ServiceProviderLoanRequests() {
                               <div className="mb-2">
                                 <b>Geo-tag Image:</b><br/>
                                 <img 
-                                  src={`http://localhost:5000/${loan.ngoGeoTagImage}`} 
+                                  src={`${API_BASE_URL}/${loan.ngoGeoTagImage}`} 
                                   alt="NGO Geo-tag" 
                                   style={{ maxWidth: '200px', maxHeight: '150px', borderRadius: '8px' }}
                                 />
