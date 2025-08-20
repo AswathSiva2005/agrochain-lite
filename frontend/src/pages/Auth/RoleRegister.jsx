@@ -368,7 +368,7 @@ function RoleRegister() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
         >
-          <p className="text-white-50" style={{ fontSize: '0.9rem' }}>
+          <p className="text-black-50" style={{ fontSize: '0.9rem' }}>
             © 2024 AgroChain Lite. All rights reserved.
           </p>
         </motion.div>

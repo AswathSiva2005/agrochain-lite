@@ -7,36 +7,89 @@ import nodemailer from 'nodemailer';
 // In-memory OTP store (for demo; use Redis/db for production)
 export const otpStore = {};
 
-// Send OTP to email (from aswathsiva0420@gmail.com, pass: dsqr ifep xidh idur, to: user given mail)
+// Rate limiting store
+const rateLimitStore = {};
+
+// Send OTP to email
 export const sendOtp = async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: 'Email required' });
+
+  // Rate limiting: max 3 OTPs per email per 10 minutes
+  const now = Date.now();
+  const tenMinutes = 10 * 60 * 1000;
+  
+  if (!rateLimitStore[email]) {
+    rateLimitStore[email] = [];
+  }
+  
+  // Clean old requests
+  rateLimitStore[email] = rateLimitStore[email].filter(time => now - time < tenMinutes);
+  
+  if (rateLimitStore[email].length >= 3) {
+    return res.status(429).json({ 
+      message: 'Too many OTP requests. Please wait 10 minutes before trying again.' 
+    });
+  }
 
   // Generate 6-digit OTP
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   otpStore[email] = { otp, expires: Date.now() + 5 * 60 * 1000 }; // 5 min expiry
 
-  // Send email using nodemailer
+  // Use environment variables for email config
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'aswathsiva0420@gmail.com',
-      pass: 'dsqr ifep xidh idur'
-    }
+      user: process.env.MAIL_USER || 'aswathsiva0420@gmail.com',
+      pass: process.env.MAIL_PASS?.replace(/\s+/g, '') || 'dsqrifepxidhidur' // Remove any spaces
+    },
+    pool: true,
+    maxConnections: 1,
+    rateDelta: 20000, // 20 seconds between emails
+    rateLimit: 3 // max 3 emails per rateDelta
   });
 
   const mailOptions = {
-    from: 'aswathsiva0420@gmail.com',
+    from: process.env.MAIL_USER || 'aswathsiva0420@gmail.com',
     to: email,
-    subject: 'Your OTP Code',
-    text: `Your One-Time Password (OTP) is: ${otp}\nThis code will expire in 5 minutes.`
+    subject: 'AgroChain - Your OTP Code',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #2C5F2D;">AgroChain Verification</h2>
+        <p>Your One-Time Password (OTP) is:</p>
+        <div style="background: #f8f9fa; padding: 20px; text-align: center; font-size: 24px; font-weight: bold; color: #2C5F2D; border-radius: 8px; margin: 20px 0;">
+          ${otp}
+        </div>
+        <p style="color: #666;">This code will expire in 5 minutes.</p>
+        <p style="color: #666; font-size: 12px;">If you didn't request this code, please ignore this email.</p>
+      </div>
+    `
   };
 
   try {
     await transporter.sendMail(mailOptions);
+    rateLimitStore[email].push(now);
+    
+    console.log(`OTP sent successfully to ${email}: ${otp}`); // For debugging
     res.json({ message: 'OTP sent successfully' });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to send OTP', error: err.message });
+    console.error('Email sending error:', err);
+    
+    // More specific error messages
+    if (err.code === 'EAUTH') {
+      res.status(500).json({ 
+        message: 'Email authentication failed. Please check email configuration.' 
+      });
+    } else if (err.code === 'ECONNECTION') {
+      res.status(500).json({ 
+        message: 'Unable to connect to email service. Please try again later.' 
+      });
+    } else {
+      res.status(500).json({ 
+        message: 'Failed to send OTP. Please try again later.',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+      });
+    }
   }
 };
 

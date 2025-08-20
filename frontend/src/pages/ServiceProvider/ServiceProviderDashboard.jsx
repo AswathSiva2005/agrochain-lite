@@ -4,8 +4,7 @@ import ServiceProviderNavbar from '../../components/ServiceProviderNavbar';
 import { LanguageContext } from '../../App';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FaUsers, FaFileContract, FaCheckCircle, FaTimesCircle, FaClock, FaChartLine, FaHandHoldingUsd } from 'react-icons/fa';
-import { API_BASE_URL } from '../../config/api.js';
+import { FaUsers, FaFileContract, FaCheckCircle, FaTimesCircle, FaClock, FaChartLine, FaHandHoldingUsd, FaUserTie } from 'react-icons/fa';
 
 const translations = {
   en: {
@@ -49,10 +48,10 @@ function ServiceProviderDashboard() {
     
     // Fetch current service provider's designation and loan stats
     Promise.all([
-      axios.get(`${API_BASE_URL}/api/users/me`, {
+      axios.get('http://localhost:5000/api/users/me', {
         headers: { Authorization: `Bearer ${token}` }
       }),
-      axios.get(`${API_BASE_URL}/api/loans/stats`, {
+      axios.get('http://localhost:5000/api/loans/stats', {
         headers: { Authorization: `Bearer ${token}` }
       })
     ]).then(([userRes, statsRes]) => {

@@ -3,8 +3,7 @@ import axios from 'axios';
 import ServiceProviderNavbar from '../../components/ServiceProviderNavbar';
 import { LanguageContext } from '../../App';
 import { motion } from 'framer-motion';
-import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaIdCard, FaUserTag } from 'react-icons/fa';
-import { API_BASE_URL } from '../../config/api.js';
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaIdCard, FaUserTag, FaUsers, FaInfoCircle } from 'react-icons/fa';
 
 const translations = {
   en: {
@@ -61,7 +60,7 @@ function ServiceProviderUserDetails() {
 
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
-    axios.get(`${API_BASE_URL}/api/users/all`, {
+    axios.get('http://localhost:5000/api/users/all', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
