@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { LanguageContext } from '../App';
 import img from '../assets/profile.png'
-import { FaLeaf, FaSeedling, FaClipboardList, FaHandHoldingUsd, FaChartBar, FaTasks, FaSignOutAlt } from 'react-icons/fa';
+import { FaLeaf, FaSeedling, FaClipboardList, FaHandHoldingUsd, FaChartBar, FaTasks, FaSignOutAlt, FaComments } from 'react-icons/fa';
 
 const translations = {
   en: {
@@ -11,6 +11,7 @@ const translations = {
     applyLoan: "Apply Loan",
 		survey: "Survey",
 		todo: "To-Do",
+		community: "Community",
 		logout: "Logout",
   },
   ta: {
@@ -19,6 +20,7 @@ const translations = {
     applyLoan: "கடனுக்கு விண்ணப்பிக்கவும்",
 		survey: "கணக்கெடுப்பு",
 		todo: "செய்ய வேண்டியவை",
+		community: "சமூகம்",
 		logout: "வெளியேறு",
   }
 };
@@ -100,6 +102,17 @@ function FarmerNavbar() {
 					>
 						<FaTasks size={16} />
 						<span className="d-none d-md-inline">{translations[language].todo}</span>
+					</Link>
+
+					<Link
+						to="/farmer/community"
+						className="btn btn-light d-flex align-items-center gap-2"
+						style={{ borderRadius: 20, padding: '8px 14px', transition: 'all .25s ease' }}
+						onMouseEnter={(e) => { e.currentTarget.style.background = '#ffc107'; e.currentTarget.style.color = '#212529'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 18px rgba(40,167,69,.28)'; }}
+						onMouseLeave={(e) => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#212529'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+					>
+						<FaComments size={16} />
+						<span className="d-none d-md-inline">{translations[language].community}</span>
 					</Link>
 
           <button

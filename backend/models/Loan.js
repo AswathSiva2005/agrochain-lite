@@ -13,9 +13,13 @@ const loanSchema = new mongoose.Schema({
     visitDate: { type: Date },
     visitMessage: { type: String },
     officerName: { type: String },
+    officerPhone: { type: String },
   },
   ngoId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // assigned NGO
   ngoApprovedAt: { type: Date },
+  ngoGeoTagImage: { type: String }, // NGO geo-tag image path
+  ngoMessage: { type: String }, // NGO approval message
+  ngoRejectionReason: { type: String }, // NGO rejection reason
   dueAmount: { type: Number },
   loanStart: { type: Date },
   loanEnd: { type: Date },

@@ -38,12 +38,12 @@ function Survey() {
           </div>
           <div className="card-body">
             <p className="text-muted">Use this visual to understand demand. Hover nodes to highlight; the flow animates in to guide your eye.</p>
-            {topCrops.length === 0 ? (
+        {topCrops.length === 0 ? (
               <div className="text-center p-4">
                 <div className="alert alert-info d-inline-block mb-0">No data available yet.</div>
               </div>
-            ) : (
-              <div className="d-flex justify-content-center">
+        ) : (
+          <div className="d-flex justify-content-center">
                 <motion.svg
                   width="520"
                   height={height}
@@ -52,15 +52,15 @@ function Survey() {
                   variants={containerVariants}
                   style={{ filter: 'drop-shadow(0 6px 16px rgba(0,0,0,.08))' }}
                 >
-                  <defs>
+                <defs>
                     <linearGradient id="nodeGrad" x1="0" x2="1" y1="0" y2="1">
                       <stop offset="0%" stopColor="#2C5F2D" />
                       <stop offset="100%" stopColor="#17633A" />
                     </linearGradient>
-                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="5" refY="3.5" orient="auto">
-                      <polygon points="0 0, 10 3.5, 0 7" fill="#2C5F2D" />
-                    </marker>
-                  </defs>
+                  <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#2C5F2D" />
+                  </marker>
+                </defs>
 
                   <motion.g variants={itemVariants}>
                     <rect x="210" y="10" width="120" height="48" fill="url(#nodeGrad)" rx="12" />
@@ -81,8 +81,8 @@ function Survey() {
                     );
                   })}
                 </motion.svg>
-              </div>
-            )}
+          </div>
+        )}
           </div>
         </div>
       </div>

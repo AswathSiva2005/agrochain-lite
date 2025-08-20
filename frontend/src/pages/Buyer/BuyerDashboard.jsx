@@ -134,7 +134,7 @@ function BuyerDashboard() {
             </div>
           </div>
           <div className="col-12 col-md-auto">
-            <button
+          <button
               className="btn btn-success w-100"
               onClick={() => { setUnifiedSearch(''); fetchCrops(); }}
               style={{ transition: 'all .2s ease' }}
@@ -142,8 +142,8 @@ function BuyerDashboard() {
               onMouseLeave={(e) => { e.currentTarget.style.background = ''; e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
             >
               <FaSync className="me-1" /> {translations[language].refresh}
-            </button>
-          </div>
+          </button>
+        </div>
         </div>
 
         <div className="row g-4">

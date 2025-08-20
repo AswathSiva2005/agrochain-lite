@@ -35,6 +35,25 @@ export const getAllLoans = async (req, res) => {
   }
 };
 
+export const getLoanStats = async (req, res) => {
+  try {
+    const [accepted, rejected, pending] = await Promise.all([
+      Loan.countDocuments({ status: 'approved' }),
+      Loan.countDocuments({ status: 'rejected' }),
+      Loan.countDocuments({ status: 'pending' })
+    ]);
+    
+    res.json({
+      accepted,
+      rejected,
+      pending,
+      total: accepted + rejected + pending
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 export const approveLoan = async (req, res) => {
   try {
     const loan = await Loan.findById(req.params.id);

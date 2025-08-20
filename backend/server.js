@@ -15,6 +15,7 @@ import userRoutes from './routes/users.js';
 import surveyRoutes from './routes/surveyRoutes.js';
 import todoRoutes from './routes/todoRoutes.js';
 import loanSchemeRoutes from './routes/loanSchemeRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -39,10 +40,17 @@ app.use('/api/users', userRoutes); // Mount the user routes
 app.use('/api/survey', surveyRoutes); // Mount the survey routes
 app.use('/api/todo', todoRoutes); // Mount the todo routes
 app.use('/api/loan-schemes', loanSchemeRoutes); // Mount the loan scheme routes
+app.use('/api/chat', chatRoutes); // Mount the chat routes
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log('✅ MongoDB Connected');
-    app.listen(5000, () => console.log('🚀 Server running on port 5000'));
+    
+    // Seed default chat rooms
+    const { default: seedChatRooms } = await import('./scripts/seedChatRooms.js');
+    await seedChatRooms();
+    
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch((err) => console.error('❌ MongoDB connection error:', err));

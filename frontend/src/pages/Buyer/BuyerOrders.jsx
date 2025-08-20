@@ -220,13 +220,13 @@ function BuyerOrders() {
                     )}
                     <div className="flex-grow-1">
                       <div className="d-flex align-items-center justify-content-between">
-                        <h5 className="mb-0">{order.cropId?.cropName}</h5>
+                      <h5 className="mb-0">{order.cropId?.cropName}</h5>
                         <span className={`badge ${statusBadgeClass(order.status)}`} style={{ fontSize: '0.9em' }}>{translations[language].status}: {order.status}</span>
                       </div>
                       {order.paymentStatus === 'paid' && (
                         <span className="badge bg-success mt-2" style={{ borderRadius: 20 }}>
                           <FaMoneyBill className="me-1" /> {translations[language].paymentConfirmed}
-                        </span>
+                      </span>
                       )}
                     </div>
                   </div>
@@ -236,16 +236,16 @@ function BuyerOrders() {
                     <b>{translations[language].farmer}:</b> {order.farmerId?.name}<br />
                     {order.deliveryDate && (<><FaCalendarAlt className="me-1 text-warning" /> <b>{translations[language].deliveryDate}:</b> {order.deliveryDate}<br /></>)}
                   </p>
-                  {order.processUpdates && order.processUpdates.length > 0 && (
+                    {order.processUpdates && order.processUpdates.length > 0 && (
                     <div className="mt-2" style={{ background: '#F8F9FA', borderRadius: 8, padding: 8 }}>
-                      <b>Order Timeline:</b>
-                      <ul className="mb-0">
-                        {order.processUpdates.map((u, idx) => (
+                        <b>Order Timeline:</b>
+                        <ul className="mb-0">
+                          {order.processUpdates.map((u, idx) => (
                           <li key={idx}><FaRegClock className="me-2 text-secondary" /> <b>{u.status}</b> - {u.message} {u.address && <span>({u.address})</span>} <span style={{ color: '#888' }}>{new Date(u.date).toLocaleString()}</span></li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   <div className="mt-3">
                     <button
                       className={`btn me-2 ${order.status === 'accepted' ? 'btn-secondary' : 'btn-warning'}`}
@@ -263,9 +263,9 @@ function BuyerOrders() {
                     >
                       <FaTimesCircle className="me-1" /> {translations[language].cancelOrder}
                     </button>
-                    {(order.status === 'accepted' && (!order.paymentStatus || order.paymentStatus === 'pending')) && (
+                  {(order.status === 'accepted' && (!order.paymentStatus || order.paymentStatus === 'pending')) && (
                       <button className="btn btn-success" onClick={() => handlePay(order)}><FaCreditCard className="me-1" /> {translations[language].pay}</button>
-                    )}
+                  )}
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import express from 'express';
 import { protect, auth } from '../middleware/authMiddleware.js';
-import { applyLoan, getAllLoans, rejectLoan } from '../controllers/loanController.js';
+import { applyLoan, getAllLoans, rejectLoan, getLoanStats } from '../controllers/loanController.js';
 import multer from 'multer';
 import Loan from '../models/Loan.js';
 import User from '../models/User.js';
@@ -17,6 +17,17 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage });
+
+// Multer setup for NGO geo-tag images
+const geoTagStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/geotags/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-geotag-' + file.originalname);
+  }
+});
+const geoTagUpload = multer({ storage: geoTagStorage });
 
 // Farmer applies for loan (with document)
 router.post('/apply', protect, auth(['farmer']), upload.single('document'), applyLoan);
@@ -58,8 +69,8 @@ router.get('/all', protect, async (req, res) => {
   }
 });
 
-// NGO approves loan (sets status to 'ngo_approved')
-router.put('/ngo-approve/:id', protect, auth(['serviceProvider']), async (req, res) => {
+// NGO approves loan (sets status to 'ngo_approved') with geo-tag image and message
+router.put('/ngo-approve/:id', protect, auth(['serviceProvider']), geoTagUpload.single('geoTagImage'), async (req, res) => {
   try {
     if (req.user.designation !== 'NGO Field Coordinator') {
       return res.status(403).json({ message: 'Only NGO can approve at this stage' });
@@ -69,12 +80,11 @@ router.put('/ngo-approve/:id', protect, auth(['serviceProvider']), async (req, r
     loan.status = 'ngo_approved';
     loan.approvedBy = req.user._id;
     loan.ngoApprovedAt = new Date();
-    // Save sanction details if provided
-    if (req.body.sanctionDate) loan.sanctionDate = req.body.sanctionDate;
-    if (req.body.amount) loan.amount = req.body.amount;
-    if (req.body.dueAmount) loan.dueAmount = req.body.dueAmount;
-    if (req.body.loanStart) loan.loanStart = req.body.loanStart;
-    if (req.body.loanEnd) loan.loanEnd = req.body.loanEnd;
+    
+    // Save NGO geo-tag image and message
+    if (req.file) loan.ngoGeoTagImage = req.file.path;
+    if (req.body.ngoMessage) loan.ngoMessage = req.body.ngoMessage;
+    
     await loan.save();
     res.json({ message: 'Loan approved by NGO', loan });
   } catch (err) {
@@ -109,6 +119,23 @@ router.put('/approve/:id', protect, async (req, res) => {
       return res.json({ message: 'Loan approved', loan });
     }
     res.status(403).json({ message: 'Forbidden' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// NGO rejects loan with reason
+router.put('/ngo-reject/:id', protect, auth(['serviceProvider']), async (req, res) => {
+  try {
+    if (req.user.designation !== 'NGO Field Coordinator') {
+      return res.status(403).json({ message: 'Only NGO can reject at this stage' });
+    }
+    const loan = await Loan.findById(req.params.id);
+    if (!loan) return res.status(404).json({ message: 'Loan not found' });
+    loan.status = 'rejected';
+    loan.ngoRejectionReason = req.body.rejectionReason;
+    await loan.save();
+    res.json({ message: 'Loan rejected by NGO', loan });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -149,6 +176,9 @@ router.put('/field-visit/:id', protect, auth(['serviceProvider']), async (req, r
     res.status(500).json({ message: err.message });
   }
 });
+
+// Get loan statistics for service provider dashboard
+router.get('/stats', protect, auth(['serviceProvider', 'admin']), getLoanStats);
 
 export default router;
 

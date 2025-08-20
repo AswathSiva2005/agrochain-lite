@@ -6,6 +6,7 @@ import cropRoutes from './routes/cropRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import loanRoutes from './routes/loanRoutes.js';
 import todoRoutes from './routes/todoRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use('/api/crops', cropRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/loans', loanRoutes);
 app.use('/api/todo', todoRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Error handling middleware
 app.use(notFound);

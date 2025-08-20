@@ -2,18 +2,20 @@ import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { LanguageContext } from '../App';
 import img from '../assets/profile.png';
-import { FaLeaf, FaListAlt, FaUsers, FaSignOutAlt } from 'react-icons/fa';
+import { FaLeaf, FaListAlt, FaUsers, FaSignOutAlt, FaFileAlt } from 'react-icons/fa';
 
 const translations = {
   en: {
     dashboard: "Service Provider Dashboard",
     viewLoans: "View Loan Requests",
     userDetails: "User Details",
+    loanSchemes: "Loan Schemes",
   },
   ta: {
     dashboard: "சேவை வழங்குநர் பலகம்",
     viewLoans: "கடன் விண்ணப்பங்களை பார்க்கவும்",
     userDetails: "பயனர் விவரங்கள்",
+    loanSchemes: "கடன் திட்டங்கள்",
   }
 };
 
@@ -107,6 +109,33 @@ function ServiceProviderNavbar() {
           >
             <FaUsers /> {translations[language].userDetails}
           </button>
+          {designation === 'Loan Officer' && (
+            <button
+              className="btn btn-light ms-2 d-flex align-items-center"
+              onClick={() => navigate('/service-provider/loan-schemes')}
+              style={{
+                transition: 'all 0.2s ease',
+                fontWeight: 'bold',
+                gap: 8
+              }}
+              onMouseOver={e => {
+                e.currentTarget.style.backgroundColor = '#ffc107';
+                e.currentTarget.style.borderColor = '#ffc107';
+                e.currentTarget.style.color = '#212529';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 8px 18px rgba(255,193,7,.35)';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.backgroundColor = '#fff';
+                e.currentTarget.style.borderColor = '';
+                e.currentTarget.style.color = '#000';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              <FaFileAlt /> {translations[language].loanSchemes}
+            </button>
+          )}
           <button
             className="btn btn-outline-light ms-2 d-flex align-items-center justify-content-center"
             onClick={() => navigate('/service-provider/profile')}

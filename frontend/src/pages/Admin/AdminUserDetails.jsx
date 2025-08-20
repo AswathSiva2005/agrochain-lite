@@ -363,109 +363,109 @@ function AdminUserDetails() {
           </motion.div>
 
           {/* Role Selection */}
-          <motion.div
+        <motion.div
             className="mb-4 d-flex gap-3 justify-content-center flex-wrap"
-            initial="initial"
-            animate="animate"
-          >
-            {roleOptions.map(opt => (
-              <motion.button
-                key={opt.key}
+          initial="initial"
+          animate="animate"
+        >
+          {roleOptions.map(opt => (
+            <motion.button
+              key={opt.key}
                 className={`btn fw-bold d-flex align-items-center gap-2`}
-                style={{
+              style={{
                   borderRadius: 12,
-                  border: selectedRole === opt.key ? '2px solid #17633A' : 'none',
+                border: selectedRole === opt.key ? '2px solid #17633A' : 'none',
                   boxShadow: selectedRole === opt.key ? '0 4px 20px rgba(44,95,45,0.25)' : '0 2px 10px rgba(0,0,0,0.1)',
                   background: selectedRole === opt.key ? opt.color : '#fff',
                   color: selectedRole === opt.key ? '#fff' : '#6c757d'
+              }}
+              onClick={() => setSelectedRole(opt.key)}
+              variants={buttonVariants}
+              initial="initial"
+              animate={selectedRole === opt.key ? "selected" : "initial"}
+              whileHover="whileHover"
+              whileTap="whileTap"
+              transition={{ type: "spring", stiffness: 350 }}
+            >
+                <opt.icon size={18} />
+              {opt.label}
+            </motion.button>
+          ))}
+        </motion.div>
+
+          {/* Service Provider Type Filter */}
+        {selectedRole === 'serviceProvider' && (
+          <motion.div
+              className="mb-4 d-flex gap-2 justify-content-center flex-wrap"
+            initial="initial"
+            animate="animate"
+          >
+            {spTypes.map(sp => (
+              <motion.button
+                key={sp.key}
+                  className={`btn fw-bold d-flex align-items-center gap-2`}
+                style={{
+                    borderRadius: 12,
+                  border: spType === sp.key ? '2px solid #17633A' : 'none',
+                    boxShadow: spType === sp.key ? '0 4px 20px rgba(44,95,45,0.25)' : '0 2px 10px rgba(0,0,0,0.1)',
+                    background: spType === sp.key ? '#ffc107' : '#fff',
+                    color: spType === sp.key ? '#212529' : '#6c757d'
                 }}
-                onClick={() => setSelectedRole(opt.key)}
+                onClick={() => setSpType(sp.key)}
                 variants={buttonVariants}
                 initial="initial"
-                animate={selectedRole === opt.key ? "selected" : "initial"}
+                animate={spType === sp.key ? "selected" : "initial"}
                 whileHover="whileHover"
                 whileTap="whileTap"
                 transition={{ type: "spring", stiffness: 350 }}
               >
-                <opt.icon size={18} />
-                {opt.label}
+                  <sp.icon size={18} />
+                {sp.label}
               </motion.button>
             ))}
           </motion.div>
-
-          {/* Service Provider Type Filter */}
-          {selectedRole === 'serviceProvider' && (
-            <motion.div
-              className="mb-4 d-flex gap-2 justify-content-center flex-wrap"
-              initial="initial"
-              animate="animate"
-            >
-              {spTypes.map(sp => (
-                <motion.button
-                  key={sp.key}
-                  className={`btn fw-bold d-flex align-items-center gap-2`}
-                  style={{
-                    borderRadius: 12,
-                    border: spType === sp.key ? '2px solid #17633A' : 'none',
-                    boxShadow: spType === sp.key ? '0 4px 20px rgba(44,95,45,0.25)' : '0 2px 10px rgba(0,0,0,0.1)',
-                    background: spType === sp.key ? '#ffc107' : '#fff',
-                    color: spType === sp.key ? '#212529' : '#6c757d'
-                  }}
-                  onClick={() => setSpType(sp.key)}
-                  variants={buttonVariants}
-                  initial="initial"
-                  animate={spType === sp.key ? "selected" : "initial"}
-                  whileHover="whileHover"
-                  whileTap="whileTap"
-                  transition={{ type: "spring", stiffness: 350 }}
-                >
-                  <sp.icon size={18} />
-                  {sp.label}
-                </motion.button>
-              ))}
-            </motion.div>
-          )}
+        )}
 
           {/* Loading State */}
-          {loading ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
+        {loading ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
               className="text-center py-5"
-            >
+          >
               <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
                 <span className="visually-hidden">{translations[language].loading}</span>
               </div>
               <p className="mt-3 text-muted">{translations[language].loading}</p>
-            </motion.div>
-          ) : filteredUsers.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
+          </motion.div>
+        ) : filteredUsers.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
               className="text-center py-5"
-            >
+          >
               <FaUsers size={64} className="text-muted mb-3" />
               <h5 className="text-muted">{translations[language].noUsers}</h5>
-            </motion.div>
-          ) : (
+          </motion.div>
+        ) : (
             /* Data Table */
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedRole + spType}
-                variants={tableVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedRole + spType}
+              variants={tableVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
                 className="card border-0 shadow-lg"
                 style={{ borderRadius: 16, overflow: 'hidden' }}
-              >
+            >
                 <div className="table-responsive">
                   <table className="table table-hover mb-0">
                     <thead style={{ background: 'linear-gradient(135deg, #2C5F2D, #17633A)', color: '#fff' }}>
-                      <tr>
-                        {columns.map(col => (
+                  <tr>
+                    {columns.map(col => (
                           <th key={col.key} className="border-0 py-3 px-3">
                             <div className="d-flex align-items-center gap-2">
                               <col.icon size={16} />
@@ -474,26 +474,26 @@ function AdminUserDetails() {
                           </th>
                         ))}
                         <th className="border-0 py-3 px-3 text-center">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                  </tr>
+                </thead>
+                <tbody>
                       {filteredUsers.map((u, index) => (
-                        <motion.tr
-                          key={u._id}
-                          initial={{ opacity: 0, x: -30 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 30 }}
+                    <motion.tr
+                      key={u._id}
+                      initial={{ opacity: 0, x: -30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 30 }}
                           transition={{ duration: 0.25, delay: index * 0.05 }}
                           style={{ cursor: 'pointer' }}
                           className="border-bottom"
-                        >
-                          {columns.map(col => (
+                    >
+                      {columns.map(col => (
                             <td key={col.key} className="py-3 px-3 align-middle">
-                              {col.key === 'role'
-                                ? roleBadge(u.role)
-                                : u[col.key] || '-'}
-                            </td>
-                          ))}
+                          {col.key === 'role'
+                            ? roleBadge(u.role)
+                            : u[col.key] || '-'}
+                        </td>
+                      ))}
                           <td className="py-3 px-3 text-center">
                             <div className="d-flex gap-2 justify-content-center">
                               <motion.button
@@ -522,14 +522,14 @@ function AdminUserDetails() {
                               </motion.button>
                             </div>
                           </td>
-                        </motion.tr>
-                      ))}
-                    </tbody>
-                  </table>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
                 </div>
-              </motion.div>
-            </AnimatePresence>
-          )}
+            </motion.div>
+          </AnimatePresence>
+        )}
         </motion.div>
       </div>
     </>

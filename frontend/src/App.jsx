@@ -16,6 +16,7 @@ import AdminProfile from './pages/Admin/Profile';
 import Survey from './pages/Farmer/Survey';
 import ToDo from './pages/Farmer/ToDo';
 import FarmerProfile from './pages/Farmer/Profile';
+import Community from './pages/Farmer/Community';
 import BuyerProfile from './pages/Buyer/Profile';
 // import AdminProfile from './pages/Admin/Profile';
 import RoleRegister from './pages/Auth/RoleRegister';
@@ -66,6 +67,7 @@ function AppWrapper() {
             <Route path="/farmer/survey" element={<Survey />} />
             <Route path="/farmer/todo" element={<ToDo />} />
             <Route path="/farmer/profile" element={<FarmerProfile />} />
+            <Route path="/farmer/community" element={<Community />} />
             <Route path="/farmer/apply-loan/:schemeId" element={<ApplyLoanForm />} />
 
             {/* Buyer Routes */}
