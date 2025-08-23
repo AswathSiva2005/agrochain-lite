@@ -38,7 +38,7 @@ function ServiceProviderRegister() {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/send-otp', { email: form.email });
+      const response = await axios.post('https://agrochain-lite.onrender.com/api/auth/send-otp', { email: form.email });
       setOtpSent(true);
       
       // Check if we're in development mode and OTP is returned
@@ -59,7 +59,7 @@ function ServiceProviderRegister() {
       return;
     }
     try {
-      await axios.post('http://localhost:5000/api/auth/verify-otp', { email: form.email, otp });
+      await axios.post('https://agrochain-lite.onrender.com/api/auth/verify-otp', { email: form.email, otp });
       setOtpVerified(true);
       setMessage('OTP verified! You can now register.');
     } catch (err) {
@@ -74,7 +74,7 @@ function ServiceProviderRegister() {
       return;
     }
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { ...form, role: 'serviceProvider', otp });
+      await axios.post('https://agrochain-lite.onrender.com/api/auth/register', { ...form, role: 'serviceProvider', otp });
       setMessage('Registration successful!');
     } catch (err) {
       setMessage(err.response?.data?.message || 'Registration failed');

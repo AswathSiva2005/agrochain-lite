@@ -13,7 +13,7 @@ function AdminProfile() {
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
     if (!token) return setLoading(false);
-    axios.get('http://localhost:5000/api/users/me', {
+    axios.get('https://agrochain-lite.onrender.com/api/users/me', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
       setProfile({
@@ -31,14 +31,14 @@ function AdminProfile() {
   const handleSave = async () => {
     const token = localStorage.getItem('agrochain-token');
     try {
-      await axios.put('http://localhost:5000/api/users/me', profile, {
+      await axios.put('https://agrochain-lite.onrender.com/api/users/me', profile, {
         headers: { Authorization: `Bearer ${token}` }
       }).catch(() => {});
 
       if (avatarFile) {
         const fd = new FormData();
         fd.append('avatar', avatarFile);
-        await axios.post('http://localhost:5000/api/users/me/avatar', fd, {
+        await axios.post('https://agrochain-lite.onrender.com/api/users/me/avatar', fd, {
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
         }).catch(() => {});
       }

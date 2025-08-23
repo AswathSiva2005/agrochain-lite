@@ -47,7 +47,7 @@ function ToDo() {
     setLoading(true);
     const token = localStorage.getItem('agrochain-token');
     try {
-      const res = await axios.get('http://localhost:5000/api/todo/my', {
+      const res = await axios.get('https://agrochain-lite.onrender.com/api/todo/my', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTasks(res.data.tasks || []);
@@ -94,7 +94,7 @@ function ToDo() {
     const token = localStorage.getItem('agrochain-token');
     if (!newTask[dayIdx].text.trim()) return;
     try {
-      await axios.post('http://localhost:5000/api/todo/add', {
+      await axios.post('https://agrochain-lite.onrender.com/api/todo/add', {
         day: dayIdx,
         text: newTask[dayIdx].text,
         time: newTask[dayIdx].time
@@ -115,7 +115,7 @@ function ToDo() {
   const handleMarkCompleted = async (dayIdx, taskIdx) => {
     const token = localStorage.getItem('agrochain-token');
     try {
-      await axios.put('http://localhost:5000/api/todo/complete', {
+      await axios.put('https://agrochain-lite.onrender.com/api/todo/complete', {
         day: dayIdx,
         taskIdx
       }, {

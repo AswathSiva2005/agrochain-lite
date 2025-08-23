@@ -28,7 +28,7 @@ function ServiceProviderNavbar() {
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
     if (!token) return;
-    fetch('http://localhost:5000/api/users/me', { headers: { Authorization: `Bearer ${token}` } })
+    fetch('https://agrochain-lite.onrender.com/api/users/me', { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json())
       .then(data => {
         const desig = data.designation || '';

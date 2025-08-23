@@ -11,7 +11,7 @@ function Survey() {
   const { language } = useContext(LanguageContext);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/survey/top-crops')
+    axios.get('https://agrochain-lite.onrender.com/api/survey/top-crops')
       .then(res => setTopCrops(res.data))
       .catch(() => setTopCrops([]));
   }, []);

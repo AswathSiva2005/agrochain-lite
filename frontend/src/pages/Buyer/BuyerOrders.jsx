@@ -95,7 +95,7 @@ function BuyerOrders() {
 
   const fetchOrders = () => {
     const token = localStorage.getItem('agrochain-token');
-    axios.get('http://localhost:5000/api/orders/buyer', {
+    axios.get('https://agrochain-lite.onrender.com/api/orders/buyer', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setOrders(res.data))
@@ -111,7 +111,7 @@ function BuyerOrders() {
     if (window.confirm(translations[language].cancelOrder + "?")) {
       try {
         await axios.put(
-          `http://localhost:5000/api/orders/cancel/${orderId}`,
+          `https://agrochain-lite.onrender.com/api/orders/cancel/${orderId}`,
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -135,7 +135,7 @@ function BuyerOrders() {
     }
     try {
       await axios.put(
-        `http://localhost:5000/api/orders/${editOrder._id}`,
+        `https://agrochain-lite.onrender.com/api/orders/${editOrder._id}`,
         { quantity: Number(editQty) },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -178,7 +178,7 @@ function BuyerOrders() {
     }
     try {
       await axios.post(
-        `http://localhost:5000/api/orders/pay/${payOrder._id}`,
+        `https://agrochain-lite.onrender.com/api/orders/pay/${payOrder._id}`,
         { paymentMethod, cardNumber, cardName, expiry, cvv, gpayNumber },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -212,7 +212,7 @@ function BuyerOrders() {
                 <div className="card-body">
                   <div className="d-flex align-items-center mb-3">
                     {order.cropId?.image ? (
-                      <img src={`http://localhost:5000/${order.cropId.image.replace(/^\/+/, '')}`} alt={order.cropId?.cropName || 'Crop'} style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #2C5F2D', background: '#fff' }} />
+                      <img src={`https://agrochain-lite.onrender.com/${order.cropId.image.replace(/^\/+/, '')}`} alt={order.cropId?.cropName || 'Crop'} style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #2C5F2D', background: '#fff' }} />
                     ) : (
                       <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#E9F7EF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 16, fontSize: 28, color: '#2C5F2D', fontWeight: 'bold' }}>
                         {order.cropId?.cropName?.[0]?.toUpperCase() || '-'}

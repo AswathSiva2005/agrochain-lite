@@ -84,7 +84,7 @@ function AddCrop() {
       if (image) formData.append('image', image);
 
       await axios.post(
-        'http://localhost:5000/api/crops/add',
+        'https://agrochain-lite.onrender.com/api/crops/add',
         formData,
         {
           headers: {

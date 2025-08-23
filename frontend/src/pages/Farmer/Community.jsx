@@ -111,7 +111,7 @@ function Community() {
 
   const fetchChatRooms = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/chat/rooms', {
+      const response = await axios.get('https://agrochain-lite.onrender.com/api/chat/rooms', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setChatRooms(response.data);
@@ -130,7 +130,7 @@ function Community() {
 
   const fetchMessages = async (roomId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/chat/rooms/${roomId}/messages`, {
+      const response = await axios.get(`https://agrochain-lite.onrender.com/api/chat/rooms/${roomId}/messages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessages(response.data);
@@ -144,7 +144,7 @@ function Community() {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/chat/rooms/${selectedRoom._id}/messages`,
+        `https://agrochain-lite.onrender.com/api/chat/rooms/${selectedRoom._id}/messages`,
         { content: newMessage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -159,7 +159,7 @@ function Community() {
   const joinRoom = async (roomId) => {
     try {
       await axios.post(
-        `http://localhost:5000/api/chat/rooms/${roomId}/join`,
+        `https://agrochain-lite.onrender.com/api/chat/rooms/${roomId}/join`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

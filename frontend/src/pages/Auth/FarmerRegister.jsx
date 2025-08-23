@@ -129,7 +129,7 @@ function FarmerRegister() {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/send-otp', { email: form.email });
+      const response = await axios.post('https://agrochain-lite.onrender.com/api/auth/send-otp', { email: form.email });
       setOtpSent(true);
       
       // Check if we're in development mode and OTP is returned
@@ -150,7 +150,7 @@ function FarmerRegister() {
       return;
     }
     try {
-      await axios.post('http://localhost:5000/api/auth/verify-otp', { email: form.email, otp });
+      await axios.post('https://agrochain-lite.onrender.com/api/auth/verify-otp', { email: form.email, otp });
       setOtpVerified(true);
       setMessage(translations[language].otpVerifiedMsg);
     } catch (err) {
@@ -165,7 +165,7 @@ function FarmerRegister() {
       return;
     }
     try {
-      await axios.post('http://localhost:5000/api/auth/register-farmer', { ...form, otp });
+      await axios.post('https://agrochain-lite.onrender.com/api/auth/register-farmer', { ...form, otp });
       setMessage(translations[language].registrationSuccess);
     } catch (err) {
       setMessage(err.response?.data?.message || translations[language].registrationFailed);

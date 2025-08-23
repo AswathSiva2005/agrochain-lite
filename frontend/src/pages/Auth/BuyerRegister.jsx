@@ -135,7 +135,7 @@ function BuyerRegister() {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/send-otp', { email: form.email });
+      const response = await axios.post('https://agrochain-lite.onrender.com/api/auth/send-otp', { email: form.email });
       setOtpSent(true);
       
       // Check if we're in development mode and OTP is returned
@@ -156,7 +156,7 @@ function BuyerRegister() {
       return;
     }
     try {
-      await axios.post('http://localhost:5000/api/auth/verify-otp', { email: form.email, otp });
+      await axios.post('https://agrochain-lite.onrender.com/api/auth/verify-otp', { email: form.email, otp });
       setOtpVerified(true);
       setMessage(translations[language].otpVerifiedMsg);
     } catch (err) {
@@ -171,7 +171,7 @@ function BuyerRegister() {
       return;
     }
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { ...form, role: 'buyer', otp });
+      await axios.post('https://agrochain-lite.onrender.com/api/auth/register', { ...form, role: 'buyer', otp });
       setMessage(translations[language].registrationSuccess);
     } catch (err) {
       setMessage(err.response?.data?.message || translations[language].registrationFailed);

@@ -6,7 +6,7 @@ function FarmerOrders() {
 
   const fetchOrders = () => {
     const token = localStorage.getItem('agrochain-token');
-    axios.get('http://localhost:5000/api/orders/farmer', {
+    axios.get('https://agrochain-lite.onrender.com/api/orders/farmer', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setOrders(res.data))
@@ -21,7 +21,7 @@ function FarmerOrders() {
     const token = localStorage.getItem('agrochain-token');
     try {
       await axios.put(
-        `http://localhost:5000/api/orders/status/${orderId}`,
+        `https://agrochain-lite.onrender.com/api/orders/status/${orderId}`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );

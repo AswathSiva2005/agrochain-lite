@@ -64,7 +64,7 @@ function ViewOrders() {
 
   const fetchOrders = () => {
     const token = localStorage.getItem('agrochain-token');
-    axios.get('http://localhost:5000/api/orders/farmer', {
+    axios.get('https://agrochain-lite.onrender.com/api/orders/farmer', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setOrders(res.data))
@@ -79,7 +79,7 @@ function ViewOrders() {
     const token = localStorage.getItem('agrochain-token');
     try {
       await axios.put(
-        `http://localhost:5000/api/orders/status/${orderId}`,
+        `https://agrochain-lite.onrender.com/api/orders/status/${orderId}`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -102,7 +102,7 @@ function ViewOrders() {
     }
     try {
       await axios.put(
-        `http://localhost:5000/api/orders/status/${acceptOrderId}`,
+        `https://agrochain-lite.onrender.com/api/orders/status/${acceptOrderId}`,
         { status: 'accepted', deliveryDate },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -125,7 +125,7 @@ function ViewOrders() {
     const token = localStorage.getItem('agrochain-token');
     try {
       await axios.post(
-        `http://localhost:5000/api/orders/process-update/${processModal.orderId}`,
+        `https://agrochain-lite.onrender.com/api/orders/process-update/${processModal.orderId}`,
         {
           status: processStatus,
           message: processMessage,
@@ -156,7 +156,7 @@ function ViewOrders() {
       );
       setNotified(true);
       const token = localStorage.getItem('agrochain-token');
-      axios.post('http://localhost:5000/api/orders/notifications/mark-read', {}, {
+      axios.post('https://agrochain-lite.onrender.com/api/orders/notifications/mark-read', {}, {
         headers: { Authorization: `Bearer ${token}` }
       }).then(() => fetchOrders());
     }
@@ -195,7 +195,7 @@ function ViewOrders() {
                     <div className="d-flex align-items-center mb-3">
                       {order.cropId?.image ? (
                         <img
-                          src={`http://localhost:5000/${order.cropId.image.replace(/^\/+/, '')}`}
+                          src={`https://agrochain-lite.onrender.com/${order.cropId.image.replace(/^\/+/, '')}`}
                           alt={order.cropId?.cropName || 'Crop'}
                           style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #2C5F2D', background: '#fff' }}
                         />

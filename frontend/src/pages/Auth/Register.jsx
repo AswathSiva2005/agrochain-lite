@@ -64,7 +64,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', formData);
+      const res = await axios.post('https://agrochain-lite.onrender.com/api/auth/register', formData);
       setMessage(res.data.message || 'Registration successful ✅');
     } catch (err) {
       console.error(err);

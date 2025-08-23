@@ -60,7 +60,7 @@ function AdminLoanRequests() {
       setLoans([]);
       return;
     }
-    axios.get('http://localhost:5000/api/loans/all', {
+    axios.get('https://agrochain-lite.onrender.com/api/loans/all', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -88,7 +88,7 @@ function AdminLoanRequests() {
   const confirmApprove = async () => {
     const token = localStorage.getItem('agrochain-token');
     await axios.put(
-      `http://localhost:5000/api/loans/approve/${sanctionDateModal.loanId}`,
+      `https://agrochain-lite.onrender.com/api/loans/approve/${sanctionDateModal.loanId}`,
       {
         sanctionDate,
         visitDate,
@@ -106,7 +106,7 @@ function AdminLoanRequests() {
 
   const handleReject = async (id) => {
     const token = localStorage.getItem('agrochain-token');
-    await axios.put(`http://localhost:5000/api/loans/reject/${id}`, {}, {
+    await axios.put(`https://agrochain-lite.onrender.com/api/loans/reject/${id}`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     });
     fetchLoans();
@@ -116,7 +116,7 @@ function AdminLoanRequests() {
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
     if (token) {
-      axios.get('http://localhost:5000/api/users/me', {
+      axios.get('https://agrochain-lite.onrender.com/api/users/me', {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => {
@@ -182,7 +182,7 @@ function AdminLoanRequests() {
                       {loan.document && (
                         <>
                           <b>{translations[language].document}:</b>{' '}
-                          <a href={`http://localhost:5000/${loan.document}`} target="_blank" rel="noopener noreferrer">
+                          <a href={`https://agrochain-lite.onrender.com/${loan.document}`} target="_blank" rel="noopener noreferrer">
                             {translations[language].viewDoc}
                           </a><br />
                         </>

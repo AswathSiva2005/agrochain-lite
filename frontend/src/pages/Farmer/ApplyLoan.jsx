@@ -64,11 +64,11 @@ function ApplyLoan() {
 
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
-    axios.get('http://localhost:5000/api/loan-schemes/all', {
+    axios.get('https://agrochain-lite.onrender.com/api/loan-schemes/all', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setSchemes(res.data)).catch(() => setSchemes([]));
 
-    axios.get('http://localhost:5000/api/users/all', {
+    axios.get('https://agrochain-lite.onrender.com/api/users/all', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
       const officerMap = {};
@@ -178,7 +178,7 @@ function ApplyLoan() {
                         </div>
                         <div>
                           {s.brochure ? (
-                            <a href={`http://localhost:5000/${s.brochure}`} target="_blank" rel="noopener noreferrer" className="btn btn-outline-danger btn-sm" style={{ borderRadius: 20 }}>
+                            <a href={`https://agrochain-lite.onrender.com/${s.brochure}`} target="_blank" rel="noopener noreferrer" className="btn btn-outline-danger btn-sm" style={{ borderRadius: 20 }}>
                               <FaFilePdf className="me-2" /> {translations[language].viewPDF}
                             </a>
                           ) : (

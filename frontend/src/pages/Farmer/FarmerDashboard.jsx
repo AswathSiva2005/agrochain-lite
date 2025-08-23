@@ -63,9 +63,9 @@ function FarmerDashboard() {
     const headers = { Authorization: `Bearer ${token}` };
 
     Promise.all([
-      axios.get('http://localhost:5000/api/loans/my', { headers }),
-      axios.get('http://localhost:5000/api/crops/my-crops', { headers, params: { farmerName: name } }),
-      axios.get('http://localhost:5000/api/orders/farmer', { headers })
+      axios.get('https://agrochain-lite.onrender.com/api/loans/my', { headers }),
+      axios.get('https://agrochain-lite.onrender.com/api/crops/my-crops', { headers, params: { farmerName: name } }),
+      axios.get('https://agrochain-lite.onrender.com/api/orders/farmer', { headers })
     ])
       .then(([loansRes, cropsRes, ordersRes]) => {
         // Loans
@@ -184,7 +184,7 @@ function FarmerDashboard() {
                           <div className="mb-1"><span className="text-muted small">Amount</span><div className="fw-bold">₹{loan.amount}</div></div>
                           <div className="mb-1"><span className="text-muted small">Reason</span><div className="fw-semibold text-wrap">{loan.reason}</div></div>
                           {loan.document && (
-                            <a href={`http://localhost:5000/${loan.document}`} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm mt-2" style={{ borderRadius: 20 }}>
+                            <a href={`https://agrochain-lite.onrender.com/${loan.document}`} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm mt-2" style={{ borderRadius: 20 }}>
                               <FaFileAlt className="me-2" />Document
                             </a>
                           )}

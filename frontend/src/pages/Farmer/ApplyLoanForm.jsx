@@ -19,17 +19,17 @@ function ApplyLoanForm() {
 
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
-    axios.get(`http://localhost:5000/api/loan-schemes/${schemeId}`, {
+    axios.get(`https://agrochain-lite.onrender.com/api/loan-schemes/${schemeId}`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setScheme(res.data)).catch(() => setScheme(null));
 
     // Get farmer's district from profile
-    axios.get('http://localhost:5000/api/users/me', {
+    axios.get('https://agrochain-lite.onrender.com/api/users/me', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setDistrict(res.data.district || ''));
 
     // Get all NGOs for selection
-    axios.get('http://localhost:5000/api/users/all', {
+    axios.get('https://agrochain-lite.onrender.com/api/users/all', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
       const ngoList = res.data.filter(u => u.role === 'serviceProvider' && u.designation === 'NGO Field Coordinator');
@@ -53,7 +53,7 @@ function ApplyLoanForm() {
     formData.append('district', district);
 
     try {
-      await axios.post('http://localhost:5000/api/loans/apply', formData, {
+      await axios.post('https://agrochain-lite.onrender.com/api/loans/apply', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,

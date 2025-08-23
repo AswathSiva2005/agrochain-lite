@@ -62,7 +62,7 @@ function BuyerDashboard() {
   const { language } = useContext(LanguageContext);
 
   const fetchCrops = () => {
-    const url = 'http://localhost:5000/api/crops/all';
+    const url = 'https://agrochain-lite.onrender.com/api/crops/all';
     axios.get(url)
       .then(res => {
         setCrops(res.data);
@@ -103,7 +103,7 @@ function BuyerDashboard() {
     const token = localStorage.getItem('agrochain-token');
     try {
       await axios.post(
-        'http://localhost:5000/api/orders/place',
+        'https://agrochain-lite.onrender.com/api/orders/place',
         {
           cropName: selectedCrop.cropName,
           quantity: Number(orderQty),
@@ -179,7 +179,7 @@ function BuyerDashboard() {
               <div className="card border-0 shadow-lg h-100" style={{ borderRadius: 16 }}>
                 {crop.image && (
                   <img
-                    src={`http://localhost:5000/${crop.image.replace(/^\/+/, '')}`}
+                    src={`https://agrochain-lite.onrender.com/${crop.image.replace(/^\/+/, '')}`}
                     alt={crop.cropName}
                     className="card-img-top"
                     style={{ maxHeight: 180, objectFit: 'cover' }}

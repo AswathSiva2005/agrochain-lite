@@ -167,7 +167,7 @@ function AdminUserDetails() {
 
   useEffect(() => {
     const token = localStorage.getItem('agrochain-token');
-    axios.get('http://localhost:5000/api/users/all', {
+    axios.get('https://agrochain-lite.onrender.com/api/users/all', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
