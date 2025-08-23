@@ -133,18 +133,24 @@ function BuyerDashboard() {
     <>
       <BuyerNavbar />
       <div className="container py-4">
-        <div className="d-flex align-items-center justify-content-between mb-3">
-          <h3 className="fw-bold" style={{ color: '#2C5F2D' }}>{translations[language].availableCrops}</h3>
+        <div className="d-flex align-items-center justify-content-between mb-3 flex-wrap">
+          <h3 className="fw-bold mb-2 mb-md-0" style={{ color: '#2C5F2D' }}>{translations[language].availableCrops}</h3>
         </div>
         <div className="row g-2 align-items-center mb-3">
-          <div className="col-12 col-md-8">
+          <div className="col-12 col-lg-8">
             <div className="input-group">
               <span className="input-group-text"><FaSearch /></span>
-              <input type="text" className="form-control" placeholder="Search by crop, farmer or address..." value={unifiedSearch} onChange={e => setUnifiedSearch(e.target.value)} />
+              <input 
+                type="text" 
+                className="form-control" 
+                placeholder="Search by crop, farmer or address..." 
+                value={unifiedSearch} 
+                onChange={e => setUnifiedSearch(e.target.value)} 
+              />
             </div>
           </div>
-          <div className="col-12 col-md-auto">
-          <button
+          <div className="col-12 col-lg-4">
+            <button
               className="btn btn-success w-100"
               onClick={() => { setUnifiedSearch(''); fetchCrops(); }}
               style={{ transition: 'all .2s ease' }}
@@ -152,11 +158,11 @@ function BuyerDashboard() {
               onMouseLeave={(e) => { e.currentTarget.style.background = ''; e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
             >
               <FaSync className="me-1" /> {translations[language].refresh}
-          </button>
-        </div>
+            </button>
+          </div>
         </div>
 
-        <div className="row g-4">
+        <div className="row g-3 g-md-4">
           {crops.length === 0 && (
             <div className="col-12">
               <div className="alert alert-info">{translations[language].noCrops}</div>
@@ -175,32 +181,54 @@ function BuyerDashboard() {
               return cropName.includes(q) || farmerName.includes(q) || address.includes(q);
             })
             .map(crop => (
-            <div className="col-md-4" key={crop._id}>
+            <div className="col-12 col-sm-6 col-lg-4" key={crop._id}>
               <div className="card border-0 shadow-lg h-100" style={{ borderRadius: 16 }}>
                 {crop.image && (
                   <img
                     src={`https://agrochain-lite.onrender.com/${crop.image.replace(/^\/+/, '')}`}
                     alt={crop.cropName}
                     className="card-img-top"
-                    style={{ maxHeight: 180, objectFit: 'cover' }}
+                    style={{ maxHeight: 180, objectFit: 'cover', borderRadius: '16px 16px 0 0' }}
                     onError={e => { e.target.onerror = null; e.target.src = "https://via.placeholder.com/300x180?text=No+Image"; }}
                   />
                 )}
-                <div className="card-body">
-                  <h5 className="card-title mb-1">{crop.cropName}</h5>
-                  <div className="small text-muted mb-2 d-flex align-items-center"><FaUser className="me-2" /> Farmer: {crop.farmer?.name || '-'}</div>
-                  <div className="row g-2 mb-2" style={{ fontSize: '0.96em' }}>
-                    <div className="col-6 d-flex align-items-center"><FaRupeeSign className="me-2 text-success" /> ₹{crop.pricePerKg}/kg</div>
-                    <div className="col-6">Qty: {crop.quantity} kg</div>
+                <div className="card-body p-3">
+                  <h5 className="card-title mb-2 text-truncate">{crop.cropName}</h5>
+                  <div className="small text-muted mb-2 d-flex align-items-center">
+                    <FaUser className="me-2 flex-shrink-0" /> 
+                    <span className="text-truncate">Farmer: {crop.farmer?.name || '-'}</span>
+                  </div>
+                  <div className="row g-2 mb-3" style={{ fontSize: '0.9em' }}>
+                    <div className="col-6 d-flex align-items-center">
+                      <FaRupeeSign className="me-1 text-success flex-shrink-0" /> 
+                      <span className="fw-semibold">₹{crop.pricePerKg}/kg</span>
+                    </div>
+                    <div className="col-6 text-end">
+                      <span className="badge bg-light text-dark">Qty: {crop.quantity} kg</span>
+                    </div>
                     {crop.cultivationDate && (
-                      <div className="col-12 d-flex align-items-center"><FaCalendarAlt className="me-2 text-info" /> {translations[language].cultivationDate}: {new Date(crop.cultivationDate).toLocaleDateString()}</div>
+                      <div className="col-12 d-flex align-items-center">
+                        <FaCalendarAlt className="me-2 text-info flex-shrink-0" /> 
+                        <small className="text-truncate">{translations[language].cultivationDate}: {new Date(crop.cultivationDate).toLocaleDateString()}</small>
+                      </div>
                     )}
                     {crop.address && (
-                      <div className="col-12 d-flex align-items-center"><FaHome className="me-2 text-secondary" /> {crop.address}</div>
+                      <div className="col-12 d-flex align-items-center">
+                        <FaHome className="me-2 text-secondary flex-shrink-0" /> 
+                        <small className="text-truncate">{crop.address}</small>
+                      </div>
                     )}
                   </div>
-                  {crop.description && (<p className="text-muted" style={{ fontSize: '0.9em' }}>{crop.description}</p>)}
-                  <button className="btn btn-primary w-100" onClick={() => handleOrderClick(crop)} style={{ borderRadius: 10 }}>
+                  {crop.description && (
+                    <p className="text-muted mb-3" style={{ fontSize: '0.85em', lineHeight: '1.4' }}>
+                      {crop.description.length > 80 ? `${crop.description.substring(0, 80)}...` : crop.description}
+                    </p>
+                  )}
+                  <button 
+                    className="btn btn-primary w-100" 
+                    onClick={() => handleOrderClick(crop)} 
+                    style={{ borderRadius: 10 }}
+                  >
                     <FaShoppingCart className="me-2" /> {translations[language].order}
                   </button>
                 </div>
@@ -210,50 +238,113 @@ function BuyerDashboard() {
         </div>
 
         {selectedCrop && (
-          <div className="modal show" style={{ display: 'block', background: 'rgba(0,0,0,0.5)' }}>
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header" style={{ background: 'linear-gradient(135deg, #2C5F2D, #17633A)', color: '#fff' }}>
+          <div className="modal show d-block" style={{ background: 'rgba(0,0,0,0.5)', zIndex: 1050 }}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content" style={{ borderRadius: '16px' }}>
+                <div className="modal-header" style={{ background: 'linear-gradient(135deg, #2C5F2D, #17633A)', color: '#fff', borderRadius: '16px 16px 0 0' }}>
                   <h5 className="modal-title">{translations[language].orderCrop} {selectedCrop.cropName}</h5>
-                  <button type="button" className="btn-close" onClick={() => setSelectedCrop(null)}></button>
+                  <button 
+                    type="button" 
+                    className="btn-close btn-close-white" 
+                    onClick={() => setSelectedCrop(null)}
+                    aria-label="Close"
+                  ></button>
                 </div>
-                <div className="modal-body">
+                <div className="modal-body p-3 p-md-4">
                   {selectedCrop.cultivationDate && (
-                    <div className="alert alert-info mb-3">
-                      <FaCalendarAlt className="me-2" />
-                      <strong>{translations[language].cultivationDate}:</strong> {new Date(selectedCrop.cultivationDate).toLocaleDateString()}
+                    <div className="alert alert-info mb-3 d-flex align-items-center">
+                      <FaCalendarAlt className="me-2 flex-shrink-0" />
+                      <div>
+                        <strong>{translations[language].cultivationDate}:</strong> {new Date(selectedCrop.cultivationDate).toLocaleDateString()}
+                      </div>
                     </div>
                   )}
-                  <div className="input-group mb-2">
-                    <span className="input-group-text">kg</span>
-                    <input type="number" className="form-control" placeholder={translations[language].enterQty} value={orderQty} onChange={e => setOrderQty(e.target.value)} />
+                  <div className="row g-3">
+                    <div className="col-12">
+                      <label className="form-label fw-semibold">Quantity (kg)</label>
+                      <div className="input-group">
+                        <span className="input-group-text">kg</span>
+                        <input 
+                          type="number" 
+                          className="form-control" 
+                          placeholder={translations[language].enterQty} 
+                          value={orderQty} 
+                          onChange={e => setOrderQty(e.target.value)}
+                          min="1"
+                          max={selectedCrop.quantity}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <label className="form-label fw-semibold">{translations[language].address}</label>
+                      <div className="input-group">
+                        <span className="input-group-text"><FaHome /></span>
+                        <textarea 
+                          className="form-control" 
+                          placeholder={translations[language].address} 
+                          value={address} 
+                          onChange={e => setAddress(e.target.value)}
+                          rows="2"
+                          style={{ resize: 'none' }}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-6">
+                      <label className="form-label fw-semibold">{translations[language].pincode}</label>
+                      <div className="input-group">
+                        <span className="input-group-text"><FaMapMarkerAlt /></span>
+                        <input 
+                          type="text" 
+                          className="form-control" 
+                          placeholder={translations[language].pincode} 
+                          value={pincode} 
+                          onChange={e => setPincode(e.target.value)}
+                          maxLength="6"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-6">
+                      <label className="form-label fw-semibold">{translations[language].phone}</label>
+                      <div className="input-group">
+                        <span className="input-group-text"><FaPhoneAlt /></span>
+                        <input 
+                          type="tel" 
+                          className="form-control" 
+                          placeholder={translations[language].phone} 
+                          value={phone} 
+                          maxLength={10}
+                          onChange={e => {
+                            const value = e.target.value.replace(/\D/g, ''); // Only allow digits
+                            setPhone(value);
+                          }} 
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="input-group mb-2">
-                    <span className="input-group-text"><FaHome /></span>
-                    <input type="text" className="form-control" placeholder={translations[language].address} value={address} onChange={e => setAddress(e.target.value)} />
-                  </div>
-                  <div className="input-group mb-2">
-                    <span className="input-group-text"><FaMapMarkerAlt /></span>
-                    <input type="text" className="form-control" placeholder={translations[language].pincode} value={pincode} onChange={e => setPincode(e.target.value)} />
-                  </div>
-                  <div className="input-group">
-                    <span className="input-group-text"><FaPhoneAlt /></span>
-                    <input 
-                      type="tel" 
-                      className="form-control" 
-                      placeholder={translations[language].phone} 
-                      value={phone} 
-                      maxLength={10}
-                      onChange={e => {
-                        const value = e.target.value.replace(/\D/g, ''); // Only allow digits
-                        setPhone(value);
-                      }} 
-                    />
-                  </div>
+                  {orderQty && selectedCrop.pricePerKg && (
+                    <div className="mt-3 p-3 bg-light rounded">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span className="fw-semibold">Total Amount:</span>
+                        <span className="fs-5 fw-bold text-success">
+                          ₹{(Number(orderQty) * selectedCrop.pricePerKg).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" onClick={() => setSelectedCrop(null)}>{translations[language].cancel}</button>
-                  <button className="btn btn-success" onClick={handlePlaceOrder}>{translations[language].placeOrder}</button>
+                <div className="modal-footer p-3 gap-2">
+                  <button 
+                    className="btn btn-secondary flex-fill" 
+                    onClick={() => setSelectedCrop(null)}
+                  >
+                    {translations[language].cancel}
+                  </button>
+                  <button 
+                    className="btn btn-success flex-fill" 
+                    onClick={handlePlaceOrder}
+                  >
+                    {translations[language].placeOrder}
+                  </button>
                 </div>
               </div>
             </div>
@@ -262,6 +353,7 @@ function BuyerDashboard() {
       </div>
     </>
   );
+
 }
 
 export default BuyerDashboard;

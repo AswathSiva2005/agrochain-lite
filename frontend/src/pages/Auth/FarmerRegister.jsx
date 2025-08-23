@@ -178,14 +178,14 @@ function FarmerRegister() {
   return (
     <motion.div
       className="container mt-4"
-      style={{ maxWidth: 520 }}
+      style={{ maxWidth: '100%', padding: '1rem' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       {/* Language Toggle */}
       <motion.button
-        className="btn btn-light btn-sm position-absolute"
+        className="btn btn-light btn-sm position-fixed"
         style={{ 
           top: '20px', 
           right: '20px', 
@@ -214,190 +214,256 @@ function FarmerRegister() {
         {translations[language].changeLang}
       </motion.button>
 
-      <motion.div
-        className="card shadow-lg p-4 rounded"
-        style={{ background: "#f8f9fa" }}
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="text-center mb-3">
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-10 col-lg-8 col-xl-6">
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+            className="card shadow-lg p-3 p-md-4 rounded"
+            style={{ background: "#f8f9fa", borderRadius: '20px' }}
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
           >
-            <FaUser size={40} color="#2C5F2D" style={{ marginBottom: "0.5em" }} />
-          </motion.div>
-          <h3 className="mb-1" style={{ color: "#2C5F2D", fontWeight: "bold" }}>
-            {translations[language].title}
-          </h3>
-          <p className="text-muted" style={{ fontSize: "1.05em" }}>
-            {translations[language].subtitle}
-          </p>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label className="form-label fw-bold">{translations[language].name}</label>
-              <input name="name" className="form-control" placeholder={translations[language].name} value={form.name} onChange={handleChange} required />
-            </div>
-            <div className="col-md-6 mb-3">
-              <label className="form-label fw-bold">{translations[language].email}</label>
-              <input name="email" type="email" className="form-control" placeholder={translations[language].email} value={form.email} onChange={handleChange} required />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label className="form-label fw-bold">{translations[language].phone}</label>
-              <input name="phone" className="form-control" placeholder={translations[language].phone} value={form.phone} onChange={handleChange} required />
-            </div>
-            <div className="col-md-6 mb-3">
-              <label className="form-label fw-bold">{translations[language].aadhar}</label>
-              <input name="aadhar" className="form-control" placeholder={translations[language].aadhar} value={form.aadhar} onChange={handleChange} required />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label className="form-label fw-bold">{translations[language].farmerId}</label>
-              <input name="farmerId" className="form-control" placeholder={translations[language].farmerId} value={form.farmerId} onChange={handleChange} required />
-            </div>
-            <div className="col-md-6 mb-3">
-              <label className="form-label fw-bold">{translations[language].password}</label>
-              <input name="password" type="password" className="form-control" placeholder={translations[language].password} value={form.password} onChange={handleChange} required />
-            </div>
-          </div>
-          <div className="mb-3">
-            <label className="form-label fw-bold">{translations[language].address}</label>
-            <input name="address" className="form-control mb-2" placeholder={translations[language].address} value={form.address} onChange={handleChange} required />
-            <div className="row">
-              <div className="col-md-4 mb-2">
-                <select
-                  name="state"
-                  className="form-select"
-                  value={form.state}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">{translations[language].selectState}</option>
-                  {states.map(state => (
-                    <option key={state} value={state}>{state}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="col-md-4 mb-2">
-                <select
-                  name="district"
-                  className="form-select"
-                  value={form.district}
-                  onChange={handleChange}
-                  required
-                  disabled={!form.state}
-                >
-                  <option value="">{translations[language].selectDistrict}</option>
-                  {districtOptions.map(district => (
-                    <option key={district} value={district}>{district}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="col-md-4 mb-2">
-                <input name="pincode" className="form-control" placeholder={translations[language].pincode} value={form.pincode} onChange={handleChange} required />
-              </div>
-            </div>
-          </div>
-          {/* OTP Verification */}
-          <div className="mb-3">
-            <label className="form-label fw-bold">{translations[language].otpVerification}</label>
-            <div className="d-flex gap-2 mb-2">
-              <input
-                type="email"
-                className="form-control"
-                placeholder={translations[language].enterEmail}
-                value={form.email}
-                name="email"
-                onChange={handleChange}
-                required
-                disabled={otpSent}
-                style={{ maxWidth: 220 }}
-              />
-              <button
-                type="button"
-                className="btn btn-outline-primary"
-                onClick={handleSendOtp}
-                disabled={otpSent}
-                style={{ minWidth: 120 }}
+            <div className="text-center mb-4">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
               >
-                {translations[language].sendOtp}
-              </button>
+                <FaUser size={40} color="#2C5F2D" style={{ marginBottom: "0.5em" }} />
+              </motion.div>
+              <h3 className="mb-2" style={{ color: "#2C5F2D", fontWeight: "bold" }}>
+                {translations[language].title}
+              </h3>
+              <p className="text-muted" style={{ fontSize: "1.05em" }}>
+                {translations[language].subtitle}
+              </p>
             </div>
-            {otpSent && (
-              <div className="d-flex gap-2 mb-2">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder={translations[language].enterOtp}
-                  value={otp}
-                  onChange={e => setOtp(e.target.value)}
-                  style={{ maxWidth: 220 }}
-                />
-                <button
-                  type="button"
-                  className="btn btn-outline-success"
-                  onClick={handleVerifyOtp}
-                  disabled={otpVerified}
-                  style={{ minWidth: 120 }}
-                >
-                  {translations[language].verifyOtp}
-                </button>
+            <form onSubmit={handleSubmit}>
+              <div className="row g-3">
+                <div className="col-12 col-md-6">
+                  <label className="form-label fw-bold">{translations[language].name}</label>
+                  <input 
+                    name="name" 
+                    className="form-control" 
+                    placeholder={translations[language].name} 
+                    value={form.name} 
+                    onChange={handleChange} 
+                    required 
+                  />
+                </div>
+                <div className="col-12 col-md-6">
+                  <label className="form-label fw-bold">{translations[language].email}</label>
+                  <input 
+                    name="email" 
+                    type="email" 
+                    className="form-control" 
+                    placeholder={translations[language].email} 
+                    value={form.email} 
+                    onChange={handleChange} 
+                    required 
+                  />
+                </div>
+                <div className="col-12 col-md-6">
+                  <label className="form-label fw-bold">{translations[language].phone}</label>
+                  <input 
+                    name="phone" 
+                    className="form-control" 
+                    placeholder={translations[language].phone} 
+                    value={form.phone} 
+                    onChange={handleChange} 
+                    required 
+                  />
+                </div>
+                <div className="col-12 col-md-6">
+                  <label className="form-label fw-bold">{translations[language].aadhar}</label>
+                  <input 
+                    name="aadhar" 
+                    className="form-control" 
+                    placeholder={translations[language].aadhar} 
+                    value={form.aadhar} 
+                    onChange={handleChange} 
+                    required 
+                  />
+                </div>
+                <div className="col-12 col-md-6">
+                  <label className="form-label fw-bold">{translations[language].farmerId}</label>
+                  <input 
+                    name="farmerId" 
+                    className="form-control" 
+                    placeholder={translations[language].farmerId} 
+                    value={form.farmerId} 
+                    onChange={handleChange} 
+                    required 
+                  />
+                </div>
+                <div className="col-12 col-md-6">
+                  <label className="form-label fw-bold">{translations[language].password}</label>
+                  <input 
+                    name="password" 
+                    type="password" 
+                    className="form-control" 
+                    placeholder={translations[language].password} 
+                    value={form.password} 
+                    onChange={handleChange} 
+                    required 
+                  />
+                </div>
+                <div className="col-12">
+                  <label className="form-label fw-bold">{translations[language].address}</label>
+                  <input 
+                    name="address" 
+                    className="form-control mb-3" 
+                    placeholder={translations[language].address} 
+                    value={form.address} 
+                    onChange={handleChange} 
+                    required 
+                  />
+                  <div className="row g-2">
+                    <div className="col-12 col-md-4">
+                      <select
+                        name="state"
+                        className="form-select"
+                        value={form.state}
+                        onChange={handleChange}
+                        required
+                      >
+                        <option value="">{translations[language].selectState}</option>
+                        {states.map(state => (
+                          <option key={state} value={state}>{state}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-12 col-md-4">
+                      <select
+                        name="district"
+                        className="form-select"
+                        value={form.district}
+                        onChange={handleChange}
+                        required
+                        disabled={!form.state}
+                      >
+                        <option value="">{translations[language].selectDistrict}</option>
+                        {districtOptions.map(district => (
+                          <option key={district} value={district}>{district}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-12 col-md-4">
+                      <input 
+                        name="pincode" 
+                        className="form-control" 
+                        placeholder={translations[language].pincode} 
+                        value={form.pincode} 
+                        onChange={handleChange} 
+                        required 
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* OTP Verification */}
+                <div className="col-12">
+                  <label className="form-label fw-bold">{translations[language].otpVerification}</label>
+                  <div className="row g-2 mb-3">
+                    <div className="col-12 col-md-8">
+                      <input
+                        type="email"
+                        className="form-control"
+                        placeholder={translations[language].enterEmail}
+                        value={form.email}
+                        name="email"
+                        onChange={handleChange}
+                        required
+                        disabled={otpSent}
+                      />
+                    </div>
+                    <div className="col-12 col-md-4">
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary w-100"
+                        onClick={handleSendOtp}
+                        disabled={otpSent}
+                      >
+                        {translations[language].sendOtp}
+                      </button>
+                    </div>
+                  </div>
+                  {otpSent && (
+                    <div className="row g-2 mb-3">
+                      <div className="col-12 col-md-8">
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder={translations[language].enterOtp}
+                          value={otp}
+                          onChange={e => setOtp(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-12 col-md-4">
+                        <button
+                          type="button"
+                          className="btn btn-outline-success w-100"
+                          onClick={handleVerifyOtp}
+                          disabled={otpVerified}
+                        >
+                          {translations[language].verifyOtp}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {otpVerified && (
+                    <div className="alert alert-success py-2 mb-3">{translations[language].otpVerified}</div>
+                  )}
+                </div>
               </div>
-            )}
-            {otpVerified && (
-              <div className="alert alert-success py-1 mb-2">{translations[language].otpVerified}</div>
-            )}
-          </div>
-          <motion.button
-            type="submit"
-            className="btn w-100"
-            style={{
-              backgroundColor: '#2C5F2D',
-              color: '#fff',
-              fontWeight: 'bold',
-              fontSize: '1.1em',
-              borderRadius: '8px',
-              boxShadow: '0 2px 8px rgba(44,95,45,0.08)'
-            }}
-            whileHover={{ scale: 1.07, backgroundColor: "#17633A" }}
-            whileTap={{ scale: 0.97, backgroundColor: "#17633A" }}
-            transition={{ type: "spring", stiffness: 350 }}
-            disabled={!otpVerified}
-          >
-            {translations[language].register}
-          </motion.button>
-        </form>
-        {message && <div className="alert alert-info mt-3 text-center">{message}</div>}
-        <div className="mt-4 text-center">
-          <hr />
-          <span style={{ color: '#555', fontSize: '1.08em', marginRight: 8 }}>
-            {translations[language].alreadyAccount}
-          </span>
-          <a
-            href="/login"
-            className="btn btn-link"
-            style={{
-              color: '#2C5F2D',
-              fontWeight: 'bold',
-              textDecoration: 'underline',
-              fontSize: '1.08em',
-              padding: '0 8px'
-            }}
-          >
-            {translations[language].loginHere}
-          </a>
+              
+              <motion.button
+                type="submit"
+                className="btn w-100 mt-4"
+                style={{
+                  backgroundColor: '#2C5F2D',
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  fontSize: '1.1em',
+                  borderRadius: '12px',
+                  boxShadow: '0 2px 8px rgba(44,95,45,0.08)',
+                  minHeight: '50px'
+                }}
+                whileHover={{ scale: 1.02, backgroundColor: "#17633A" }}
+                whileTap={{ scale: 0.98, backgroundColor: "#17633A" }}
+                transition={{ type: "spring", stiffness: 350 }}
+                disabled={!otpVerified}
+              >
+                {translations[language].register}
+              </motion.button>
+            </form>
+            {message && <div className="alert alert-info mt-3 text-center">{message}</div>}
+            <div className="mt-4 text-center">
+              <hr />
+              <div className="d-flex flex-column flex-sm-row align-items-center justify-content-center gap-2">
+                <span style={{ color: '#555', fontSize: '1.08em' }}>
+                  {translations[language].alreadyAccount}
+                </span>
+                <a
+                  href="/login"
+                  className="btn btn-link p-0"
+                  style={{
+                    color: '#2C5F2D',
+                    fontWeight: 'bold',
+                    textDecoration: 'underline',
+                    fontSize: '1.08em'
+                  }}
+                >
+                  {translations[language].loginHere}
+                </a>
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   );
-}
 
+}
 
 export default FarmerRegister;

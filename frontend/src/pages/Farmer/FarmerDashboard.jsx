@@ -98,15 +98,17 @@ function FarmerDashboard() {
     <>
       <FarmerNavbar />
       <div className="container mt-4">
-        <h2 className="fw-bold" style={{ color: '#2C5F2D' }}>{translations[language].welcome} !</h2>
-        {/* <p className="text-muted mb-4">{translations[language].manage}</p> */}
+        <div className="mb-4">
+          <h2 className="fw-bold mb-2" style={{ color: '#2C5F2D' }}>{translations[language].welcome} !</h2>
+          {/* <p className="text-muted mb-4">{translations[language].manage}</p> */}
+        </div>
 
         {/* Quick stats row */}
         <div className="row g-3 mb-4">
-          <div className="col-12 col-md-6 col-lg-3">
+          <div className="col-6 col-lg-3">
             <div className="card h-100 border-0 shadow-sm" style={{ borderLeft: '6px solid #28a745', transition: 'all .25s ease' }} onMouseEnter={(e)=>{e.currentTarget.style.transform='translateY(-4px)';e.currentTarget.style.boxShadow='0 1rem 2rem rgba(0,0,0,.12)'}} onMouseLeave={(e)=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 .25rem .75rem rgba(0,0,0,.075)'}}>
-              <div className="card-body">
-                <div className="d-flex justify-content-between align-items-center mb-1">
+              <div className="card-body p-3">
+                <div className="d-flex justify-content-between align-items-center mb-2">
                   <div className="small text-muted">{translations[language].activeCrops}</div>
                   <FaSeedling color="#28a745" />
                 </div>
@@ -114,10 +116,10 @@ function FarmerDashboard() {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-6 col-lg-3">
+          <div className="col-6 col-lg-3">
             <div className="card h-100 border-0 shadow-sm" style={{ borderLeft: '6px solid #0d6efd', transition: 'all .25s ease' }} onMouseEnter={(e)=>{e.currentTarget.style.transform='translateY(-4px)';e.currentTarget.style.boxShadow='0 1rem 2rem rgba(0,0,0,.12)'}} onMouseLeave={(e)=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 .25rem .75rem rgba(0,0,0,.075)'}}>
-              <div className="card-body">
-                <div className="d-flex justify-content-between align-items-center mb-1">
+              <div className="card-body p-3">
+                <div className="d-flex justify-content-between align-items-center mb-2">
                   <div className="small text-muted">{translations[language].totalOrders}</div>
                   <FaClipboardCheck color="#0d6efd" />
                 </div>
@@ -125,25 +127,25 @@ function FarmerDashboard() {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-6 col-lg-3">
+          <div className="col-6 col-lg-3">
             <div className="card h-100 border-0 shadow-sm" style={{ borderLeft: '6px solid #ffc107', transition: 'all .25s ease' }} onMouseEnter={(e)=>{e.currentTarget.style.transform='translateY(-4px)';e.currentTarget.style.boxShadow='0 1rem 2rem rgba(0,0,0,.12)'}} onMouseLeave={(e)=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 .25rem .75rem rgba(0,0,0,.075)'}}>
-              <div className="card-body">
-                <div className="d-flex justify-content-between align-items-center mb-1">
+              <div className="card-body p-3">
+                <div className="d-flex justify-content-between align-items-center mb-2">
                   <div className="small text-muted">{translations[language].loanStatus}</div>
                   <FaHandHoldingUsd color="#ffc107" />
                 </div>
-                <div className="fs-6 fw-semibold text-muted">{latestLoan ? latestLoan.status : '—'}</div>
+                <div className="fs-6 fw-semibold text-muted text-truncate">{latestLoan ? latestLoan.status : '—'}</div>
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-6 col-lg-3">
+          <div className="col-6 col-lg-3">
             <div className="card h-100 border-0 shadow-sm" style={{ borderLeft: '6px solid #6f42c1', transition: 'all .25s ease' }} onMouseEnter={(e)=>{e.currentTarget.style.transform='translateY(-4px)';e.currentTarget.style.boxShadow='0 1rem 2rem rgba(0,0,0,.12)'}} onMouseLeave={(e)=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 .25rem .75rem rgba(0,0,0,.075)'}}>
-              <div className="card-body">
-                <div className="d-flex justify-content-between align-items-center mb-1">
+              <div className="card-body p-3">
+                <div className="d-flex justify-content-between align-items-center mb-2">
                   <div className="small text-muted">{translations[language].earnings}</div>
                   <FaChartLine color="#6f42c1" />
                 </div>
-                <div className="fs-4 fw-bold">{formatCurrency(stats.earnings)}</div>
+                <div className="fs-5 fs-md-4 fw-bold text-truncate">{formatCurrency(stats.earnings)}</div>
               </div>
             </div>
           </div>
@@ -153,12 +155,14 @@ function FarmerDashboard() {
 
         {myLoans && myLoans.length > 0 && (
           <div className="card border-0 shadow-lg mb-4" style={{ borderRadius: 16 }}>
-            <div className="card-header border-0 d-flex align-items-center" style={{ background: 'linear-gradient(135deg, #2C5F2D, #17633A)', color: '#fff', borderRadius: '16px 16px 0 0' }}>
-              <FaHandHoldingUsd className="me-2" />
-              <h5 className="mb-0 fw-bold">Your Loan Requests</h5>
-              <span className="badge ms-2" style={{ background: 'rgba(255,255,255,.25)', color: '#fff', borderRadius: 16 }}>{myLoans.length}</span>
-                  </div>
-                  <div className="card-body">
+            <div className="card-header border-0 d-flex align-items-center flex-wrap" style={{ background: 'linear-gradient(135deg, #2C5F2D, #17633A)', color: '#fff', borderRadius: '16px 16px 0 0' }}>
+              <div className="d-flex align-items-center flex-grow-1 mb-2 mb-md-0">
+                <FaHandHoldingUsd className="me-2" />
+                <h5 className="mb-0 fw-bold">Your Loan Requests</h5>
+              </div>
+              <span className="badge" style={{ background: 'rgba(255,255,255,.25)', color: '#fff', borderRadius: 16 }}>{myLoans.length}</span>
+            </div>
+            <div className="card-body p-3 p-md-4">
               <div className="row g-3">
                 {myLoans.map((loan) => {
                   const status = loan.status || 'pending';
@@ -169,22 +173,40 @@ function FarmerDashboard() {
                     : { color: '#f0ad4e', Icon: FaClock, label: 'Pending' };
                   const { Icon } = meta;
                   return (
-                    <div className="col-12 col-md-6 col-lg-4" key={loan._id}>
+                    <div className="col-12 col-md-6 col-xl-4" key={loan._id}>
                       <div className="card h-100 border-0 shadow-sm" style={{ borderLeft: `6px solid ${meta.color}`, transition: 'all .25s ease' }}
                         onMouseEnter={(e)=>{e.currentTarget.style.transform='translateY(-4px)';e.currentTarget.style.boxShadow='0 1rem 2rem rgba(0,0,0,.12)'}}
                         onMouseLeave={(e)=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 .25rem .75rem rgba(0,0,0,.075)'}}>
-                        <div className="card-body">
-                          <div className="d-flex align-items-center justify-content-between mb-2">
-                            <div className="d-flex align-items-center">
+                        <div className="card-body p-3">
+                          <div className="d-flex align-items-center justify-content-between mb-3 flex-wrap">
+                            <div className="d-flex align-items-center mb-1 mb-md-0">
                               <Icon size={16} color={meta.color} className="me-2" />
                               <span className="fw-semibold" style={{ color: meta.color, textTransform: 'capitalize' }}>{status}</span>
                             </div>
-                            <small className="text-muted"><FaCalendarAlt className="me-1" />{new Date(loan.appliedAt).toLocaleDateString()}</small>
+                            <small className="text-muted d-flex align-items-center">
+                              <FaCalendarAlt className="me-1" />
+                              <span className="d-none d-sm-inline">{new Date(loan.appliedAt).toLocaleDateString()}</span>
+                              <span className="d-sm-none">{new Date(loan.appliedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                            </small>
                           </div>
-                          <div className="mb-1"><span className="text-muted small">Amount</span><div className="fw-bold">₹{loan.amount}</div></div>
-                          <div className="mb-1"><span className="text-muted small">Reason</span><div className="fw-semibold text-wrap">{loan.reason}</div></div>
+                          <div className="mb-2">
+                            <span className="text-muted small">Amount</span>
+                            <div className="fw-bold fs-6">₹{loan.amount.toLocaleString()}</div>
+                          </div>
+                          <div className="mb-3">
+                            <span className="text-muted small">Reason</span>
+                            <div className="fw-semibold text-wrap" style={{ fontSize: '0.9em', lineHeight: '1.4' }}>
+                              {loan.reason.length > 60 ? `${loan.reason.substring(0, 60)}...` : loan.reason}
+                            </div>
+                          </div>
                           {loan.document && (
-                            <a href={`https://agrochain-lite.onrender.com/${loan.document}`} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm mt-2" style={{ borderRadius: 20 }}>
+                            <a 
+                              href={`https://agrochain-lite.onrender.com/${loan.document}`} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="btn btn-outline-primary btn-sm w-100" 
+                              style={{ borderRadius: 20, fontSize: '0.8em' }}
+                            >
                               <FaFileAlt className="me-2" />Document
                             </a>
                           )}
@@ -194,12 +216,13 @@ function FarmerDashboard() {
                   );
                 })}
               </div>
-                  </div>
-                </div>
+            </div>
+          </div>
         )}
       </div>
     </>
   );
+
 }
 
 export default FarmerDashboard;
