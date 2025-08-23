@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { LanguageContext } from '../../App';
-import { FaSearch, FaSync, FaHome, FaMapMarkerAlt, FaPhoneAlt, FaRupeeSign, FaUser, FaShoppingCart } from 'react-icons/fa';
+import { FaSearch, FaSync, FaHome, FaMapMarkerAlt, FaPhoneAlt, FaRupeeSign, FaUser, FaShoppingCart, FaCalendarAlt } from 'react-icons/fa';
 import BuyerNavbar from '../../components/BuyerNavbar';
 
 const translations = {
@@ -17,12 +17,14 @@ const translations = {
     address: "Address",
     pincode: "Pincode",
     phone: "Phone Number",
+    cultivationDate: "Cultivation Date",
     cancel: "Cancel",
     placeOrder: "Place Order",
     success: "Order placed successfully!",
     error: "Error placing order",
     fillAddress: "Please fill address, pincode, and phone",
     validQty: "Enter a valid quantity",
+    validPhone: "Phone number must be exactly 10 digits",
     logout: "Logout"
   },
   ta: {
@@ -37,12 +39,14 @@ const translations = {
     address: "முகவரி",
     pincode: "அஞ்சல் குறியீடு",
     phone: "தொலைபேசி எண்",
+    cultivationDate: "சாகுபடி தேதி",
     cancel: "ரத்து",
     placeOrder: "ஆர்டர் செய்யவும்",
     success: "ஆர்டர் வெற்றிகரமாக செய்யப்பட்டது!",
     error: "ஆர்டர் செய்ய பிழை",
     fillAddress: "முகவரி, அஞ்சல் குறியீடு மற்றும் தொலைபேசி எண்ணை நிரப்பவும்",
     validQty: "சரியான அளவை உள்ளிடவும்",
+    validPhone: "தொலைபேசி எண் சரியாக 10 இலக்கங்களாக இருக்க வேண்டும்",
     logout: "வெளியேறு"
   }
 };
@@ -88,6 +92,12 @@ function BuyerDashboard() {
     }
     if (!address || !pincode || !phone) {
       alert(translations[language].fillAddress);
+      return;
+    }
+    // Validate phone number - must be exactly 10 digits
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+      alert(translations[language].validPhone);
       return;
     }
     const token = localStorage.getItem('agrochain-token');
@@ -154,6 +164,9 @@ function BuyerDashboard() {
           )}
           {crops
             .filter(crop => {
+              // Filter out crops with zero or negative quantity
+              if (!crop.quantity || crop.quantity <= 0) return false;
+              
               const q = unifiedSearch.trim().toLowerCase();
               if (!q) return true;
               const cropName = (crop.cropName || '').toLowerCase();
@@ -179,6 +192,9 @@ function BuyerDashboard() {
                   <div className="row g-2 mb-2" style={{ fontSize: '0.96em' }}>
                     <div className="col-6 d-flex align-items-center"><FaRupeeSign className="me-2 text-success" /> ₹{crop.pricePerKg}/kg</div>
                     <div className="col-6">Qty: {crop.quantity} kg</div>
+                    {crop.cultivationDate && (
+                      <div className="col-12 d-flex align-items-center"><FaCalendarAlt className="me-2 text-info" /> {translations[language].cultivationDate}: {new Date(crop.cultivationDate).toLocaleDateString()}</div>
+                    )}
                     {crop.address && (
                       <div className="col-12 d-flex align-items-center"><FaHome className="me-2 text-secondary" /> {crop.address}</div>
                     )}
@@ -202,6 +218,12 @@ function BuyerDashboard() {
                   <button type="button" className="btn-close" onClick={() => setSelectedCrop(null)}></button>
                 </div>
                 <div className="modal-body">
+                  {selectedCrop.cultivationDate && (
+                    <div className="alert alert-info mb-3">
+                      <FaCalendarAlt className="me-2" />
+                      <strong>{translations[language].cultivationDate}:</strong> {new Date(selectedCrop.cultivationDate).toLocaleDateString()}
+                    </div>
+                  )}
                   <div className="input-group mb-2">
                     <span className="input-group-text">kg</span>
                     <input type="number" className="form-control" placeholder={translations[language].enterQty} value={orderQty} onChange={e => setOrderQty(e.target.value)} />
@@ -216,7 +238,17 @@ function BuyerDashboard() {
                   </div>
                   <div className="input-group">
                     <span className="input-group-text"><FaPhoneAlt /></span>
-                    <input type="text" className="form-control" placeholder={translations[language].phone} value={phone} onChange={e => setPhone(e.target.value)} />
+                    <input 
+                      type="tel" 
+                      className="form-control" 
+                      placeholder={translations[language].phone} 
+                      value={phone} 
+                      maxLength={10}
+                      onChange={e => {
+                        const value = e.target.value.replace(/\D/g, ''); // Only allow digits
+                        setPhone(value);
+                      }} 
+                    />
                   </div>
                 </div>
                 <div className="modal-footer">

@@ -4,7 +4,7 @@ import Order from '../models/Order.js'; // Use uppercase 'O'
 
 export const placeOrder = async (req, res) => {
   try {
-    const { cropName, quantity, farmerName } = req.body;
+    const { cropName, quantity, farmerName, address, pincode, phone } = req.body;
     const buyerId = req.user._id;
 
     // Step 1: Find the farmer by name
@@ -32,14 +32,23 @@ export const placeOrder = async (req, res) => {
       farmerId: farmer._id,
       cropId: crop._id,
       quantity,
-      totalPrice
+      totalPrice,
+      address,
+      pincode,
+      phone
     });
 
     await newOrder.save();
 
     // Step 5: Reduce crop quantity
     crop.quantity -= quantity;
-    await crop.save();
+    
+    // Step 6: Delete crop if quantity reaches zero
+    if (crop.quantity <= 0) {
+      await Crop.findByIdAndDelete(crop._id);
+    } else {
+      await crop.save();
+    }
 
     res.status(201).json({ message: 'Order placed successfully', order: newOrder });
   } catch (error) {

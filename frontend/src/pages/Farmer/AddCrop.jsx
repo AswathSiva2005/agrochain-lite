@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import FarmerNavbar from '../../components/FarmerNavbar';
 import { LanguageContext } from '../../App';
-import { FaSeedling, FaWeightHanging, FaRupeeSign, FaRegStickyNote, FaMapMarkerAlt, FaPhoneAlt, FaImage, FaPlus } from 'react-icons/fa';
+import { FaSeedling, FaWeightHanging, FaRupeeSign, FaRegStickyNote, FaMapMarkerAlt, FaPhoneAlt, FaImage, FaPlus, FaCalendarAlt } from 'react-icons/fa';
 
 const translations = {
   en: {
@@ -14,6 +14,7 @@ const translations = {
     description: "Description (optional)",
     address: "Address",
     phone: "Phone Number",
+    cultivationDate: "Cultivation Date",
     chooseImage: "Choose Image",
     addCrop: "Add Crop",
     success: "✅ Crop added successfully!",
@@ -28,6 +29,7 @@ const translations = {
     description: "விளக்கம் (விருப்பம்)",
     address: "முகவரி",
     phone: "தொலைபேசி எண்",
+    cultivationDate: "சாகுபடி தேதி",
     chooseImage: "படத்தைத் தேர்ந்தெடுக்கவும்",
     addCrop: "பயிர் சேர்க்கவும்",
     success: "✅ பயிர் வெற்றிகரமாக சேர்க்கப்பட்டது!",
@@ -44,6 +46,7 @@ function AddCrop() {
   const [image, setImage] = useState(null);
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
+  const [cultivationDate, setCultivationDate] = useState('');
   const navigate = useNavigate();
   const { language } = useContext(LanguageContext);
 
@@ -77,6 +80,7 @@ function AddCrop() {
       formData.append('farmerName', farmerName);
       formData.append('address', address);
       formData.append('phone', phone);
+      formData.append('cultivationDate', cultivationDate);
       if (image) formData.append('image', image);
 
       await axios.post(
@@ -98,6 +102,7 @@ function AddCrop() {
       setImage(null);
       setAddress('');
       setPhone('');
+      setCultivationDate('');
     } catch (err) {
       const errorMessage = err.response?.data?.message || translations[language].error;
       alert(errorMessage);
@@ -145,6 +150,13 @@ function AddCrop() {
                       <div className="input-group">
                         <span className="input-group-text"><FaPhoneAlt /></span>
                         <input type="text" className="form-control" placeholder={translations[language].phone} value={phone} onChange={e => { const v = e.target.value; if (/^\d{0,10}$/.test(v)) setPhone(v); }} maxLength={10} minLength={10} required />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <label className="form-label small text-muted">{translations[language].cultivationDate}</label>
+                      <div className="input-group">
+                        <span className="input-group-text"><FaCalendarAlt /></span>
+                        <input type="date" className="form-control" value={cultivationDate} onChange={(e) => setCultivationDate(e.target.value)} required />
                       </div>
                     </div>
                     <div className="col-12">

@@ -1,6 +1,6 @@
 // backend/routes/cropRoutes.js
 import express from 'express';
-import { addCrop, getMyCrops, getAllCrops } from '../controllers/cropController.js';
+import { addCrop, getMyCrops, getAllCrops, updateCrop, deleteCrop } from '../controllers/cropController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import multer from 'multer';
 import path from 'path';
@@ -27,8 +27,8 @@ const router = express.Router();
 
 router.post('/add', protect, upload.single('image'), addCrop);
 router.get('/my-crops', protect, getMyCrops);
-router.get('/all', getAllCrops); // This should be present
-
-// GET /api/crops/all?search=term will now work due to controller change
+router.get('/all', getAllCrops);
+router.put('/update/:id', protect, updateCrop);
+router.delete('/delete/:id', protect, deleteCrop);
 
 export default router;

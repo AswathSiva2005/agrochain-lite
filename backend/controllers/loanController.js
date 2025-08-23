@@ -37,19 +37,66 @@ export const getAllLoans = async (req, res) => {
 
 export const getLoanStats = async (req, res) => {
   try {
-    const [accepted, rejected, pending] = await Promise.all([
-      Loan.countDocuments({ status: 'approved' }),
-      Loan.countDocuments({ status: 'rejected' }),
-      Loan.countDocuments({ status: 'pending' })
-    ]);
+    const userDesignation = req.user.designation;
+    console.log('User designation:', userDesignation); // Debug log
     
-    res.json({
-      accepted,
-      rejected,
-      pending,
-      total: accepted + rejected + pending
-    });
+    // Get total count of all farmer loan applications
+    const totalApplications = await Loan.countDocuments();
+    
+    if (userDesignation === 'NGO Field Coordinator') {
+      // NGO sees: pending (for NGO approval), ngo_approved, ngo_rejected
+      const [pending, ngoApproved, ngoRejected] = await Promise.all([
+        Loan.countDocuments({ status: 'pending' }),
+        Loan.countDocuments({ status: 'ngo_approved' }),
+        Loan.countDocuments({ status: 'ngo_rejected' })
+      ]);
+      
+      console.log('NGO stats:', { pending, ngoApproved, ngoRejected, totalApplications }); // Debug log
+      
+      res.json({
+        accepted: ngoApproved, // NGO approved loans
+        rejected: ngoRejected, // NGO rejected loans
+        pending: pending, // Pending NGO approval
+        total: totalApplications, // Total farmer applications
+        role: 'NGO Field Coordinator' // Debug info
+      });
+    } else if (userDesignation === 'Loan Officer') {
+      // Loan Officer sees: ngo_approved (for final approval), approved, rejected
+      const [ngoApproved, approved, rejected] = await Promise.all([
+        Loan.countDocuments({ status: 'ngo_approved' }),
+        Loan.countDocuments({ status: 'approved' }),
+        Loan.countDocuments({ status: 'rejected' })
+      ]);
+      
+      console.log('Loan Officer stats:', { ngoApproved, approved, rejected, totalApplications }); // Debug log
+      
+      res.json({
+        accepted: approved, // Finally approved loans
+        rejected: rejected, // Finally rejected loans
+        pending: ngoApproved, // Pending final approval (NGO approved)
+        total: totalApplications, // Total farmer applications
+        role: 'Loan Officer' // Debug info
+      });
+    } else {
+      // Default: show all loan stats
+      const [accepted, rejected, pending] = await Promise.all([
+        Loan.countDocuments({ status: 'approved' }),
+        Loan.countDocuments({ status: 'rejected' }),
+        Loan.countDocuments({ status: 'pending' })
+      ]);
+      
+      console.log('Default stats:', { accepted, rejected, pending, totalApplications }); // Debug log
+      
+      res.json({
+        accepted,
+        rejected,
+        pending,
+        total: totalApplications, // Total farmer applications
+        role: userDesignation || 'Unknown' // Debug info
+      });
+    }
   } catch (err) {
+    console.error('Error in getLoanStats:', err);
     res.status(500).json({ message: err.message });
   }
 };

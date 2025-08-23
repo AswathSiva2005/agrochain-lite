@@ -143,7 +143,15 @@ function ServiceProviderDashboard() {
                   transition={{ duration: 0.4, delay: 0.05 }}
                   className="card border-0 shadow-lg h-100 cursor-pointer"
                   style={{ borderRadius: 16, borderLeft: '5px solid #28a745' }}
-                  onClick={() => navigate('/service-provider/loans?status=approved')}
+                  onClick={() => {
+                    if (designation === 'NGO Field Coordinator') {
+                      navigate('/service-provider/loans?status=ngo_approved');
+                    } else if (designation === 'Loan Officer') {
+                      navigate('/service-provider/loans?status=approved');
+                    } else {
+                      navigate('/service-provider/loans?status=approved');
+                    }
+                  }}
                   onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,.15)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,.1)'; }}
                 >
@@ -152,7 +160,9 @@ function ServiceProviderDashboard() {
                       <FaCheckCircle size={24} color="#28a745" />
                     </div>
                     <h2 className="fw-bold text-success mb-1">{loanStats.accepted}</h2>
-                    <h6 className="text-muted mb-2">{translations[language].accepted}</h6>
+                    <h6 className="text-muted mb-2">
+                      {designation === 'NGO Field Coordinator' ? 'NGO Approved' : translations[language].accepted}
+                    </h6>
                     <small className="text-success fw-semibold">{translations[language].viewDetails}</small>
                   </div>
                 </motion.div>
@@ -166,7 +176,13 @@ function ServiceProviderDashboard() {
                   transition={{ duration: 0.4, delay: 0.1 }}
                   className="card border-0 shadow-lg h-100 cursor-pointer"
                   style={{ borderRadius: 16, borderLeft: '5px solid #dc3545' }}
-                  onClick={() => navigate('/service-provider/loans?status=rejected')}
+                  onClick={() => {
+                    if (designation === 'NGO Field Coordinator') {
+                      navigate('/service-provider/loans?status=ngo_rejected');
+                    } else {
+                      navigate('/service-provider/loans?status=rejected');
+                    }
+                  }}
                   onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,.15)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,.1)'; }}
                 >
@@ -175,7 +191,9 @@ function ServiceProviderDashboard() {
                       <FaTimesCircle size={24} color="#dc3545" />
                     </div>
                     <h2 className="fw-bold text-danger mb-1">{loanStats.rejected}</h2>
-                    <h6 className="text-muted mb-2">{translations[language].rejected}</h6>
+                    <h6 className="text-muted mb-2">
+                      {designation === 'NGO Field Coordinator' ? 'NGO Rejected' : translations[language].rejected}
+                    </h6>
                     <small className="text-danger fw-semibold">{translations[language].viewDetails}</small>
                   </div>
                 </motion.div>
@@ -189,7 +207,15 @@ function ServiceProviderDashboard() {
                   transition={{ duration: 0.4, delay: 0.15 }}
                   className="card border-0 shadow-lg h-100 cursor-pointer"
                   style={{ borderRadius: 16, borderLeft: '5px solid #ffc107' }}
-                  onClick={() => navigate('/service-provider/loans?status=pending')}
+                  onClick={() => {
+                    if (designation === 'NGO Field Coordinator') {
+                      navigate('/service-provider/loans?status=pending');
+                    } else if (designation === 'Loan Officer') {
+                      navigate('/service-provider/loans?status=ngo_approved');
+                    } else {
+                      navigate('/service-provider/loans?status=pending');
+                    }
+                  }}
                   onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,.15)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,.1)'; }}
                 >
@@ -198,7 +224,11 @@ function ServiceProviderDashboard() {
                       <FaClock size={24} color="#ffc107" />
                     </div>
                     <h2 className="fw-bold text-warning mb-1">{loanStats.pending}</h2>
-                    <h6 className="text-muted mb-2">{translations[language].pending}</h6>
+                    <h6 className="text-muted mb-2">
+                      {designation === 'NGO Field Coordinator' ? 'Pending NGO Review' : 
+                       designation === 'Loan Officer' ? 'Pending Final Approval' : 
+                       translations[language].pending}
+                    </h6>
                     <small className="text-warning fw-semibold">{translations[language].viewDetails}</small>
                   </div>
                 </motion.div>
@@ -212,7 +242,7 @@ function ServiceProviderDashboard() {
                   transition={{ duration: 0.4, delay: 0.2 }}
                   className="card border-0 shadow-lg h-100 cursor-pointer"
                   style={{ borderRadius: 16, borderLeft: '5px solid #6f42c1' }}
-                  onClick={() => navigate('/service-provider/loans')}
+                  onClick={() => navigate('/service-provider/loans?status=all')}
                   onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,.15)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,.1)'; }}
                 >

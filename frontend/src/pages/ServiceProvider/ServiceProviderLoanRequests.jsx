@@ -5,7 +5,7 @@ import axios from 'axios';
 import ServiceProviderNavbar from '../../components/ServiceProviderNavbar';
 import { LanguageContext } from '../../App';
 import { motion } from 'framer-motion';
-import { FaFileContract, FaEye, FaCheck, FaTimes, FaCalendarAlt, FaUser, FaPhone, FaMapMarkerAlt, FaRupeeSign, FaClock, FaInfoCircle, FaUpload, FaImage, FaFileAlt, FaPhoneAlt } from 'react-icons/fa';
+import { FaFileContract, FaEye, FaCheck, FaTimes, FaCalendarAlt, FaUser, FaPhone, FaMapMarkerAlt, FaRupeeSign, FaClock, FaInfoCircle, FaUpload, FaImage, FaFileAlt, FaPhoneAlt, FaClipboardCheck } from 'react-icons/fa';
 import { API_BASE_URL } from '../../config/api.js';
 
 const translations = {
@@ -123,24 +123,37 @@ function ServiceProviderLoanRequests() {
       setLoans([]);
       return;
     }
+    
+    console.log('Status filter:', statusFilter); // Debug log
+    
     axios.get(`${API_BASE_URL}/api/loans/all`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
+        console.log('All loans from API:', res.data.length); // Debug log
         let filteredLoans = res.data;
         
         // Filter loans based on status parameter
-        if (statusFilter) {
+        if (statusFilter && statusFilter !== 'all') {
           filteredLoans = res.data.filter(loan => {
+            console.log('Checking loan status:', loan.status, 'against filter:', statusFilter); // Debug log
             if (statusFilter === 'approved') {
               return loan.status === 'approved';
             } else if (statusFilter === 'rejected') {
               return loan.status === 'rejected';
             } else if (statusFilter === 'pending') {
-              return loan.status === 'pending' || loan.status === 'ngo_approved';
+              return loan.status === 'pending';
+            } else if (statusFilter === 'ngo_approved') {
+              return loan.status === 'ngo_approved';
+            } else if (statusFilter === 'ngo_rejected') {
+              return loan.status === 'ngo_rejected';
             }
             return true; // Show all if unknown status
           });
+          console.log('Filtered loans:', filteredLoans.length, 'from total:', res.data.length); // Debug log
+        } else {
+          // Show all loans when statusFilter is 'all' or null
+          console.log('Showing all loans:', filteredLoans.length); // Debug log
         }
         
         setLoans(filteredLoans);
@@ -356,6 +369,9 @@ function ServiceProviderLoanRequests() {
               {statusFilter === 'approved' ? translations[language].acceptedLoans :
                statusFilter === 'rejected' ? translations[language].rejectedLoans :
                statusFilter === 'pending' ? translations[language].pendingLoans :
+               statusFilter === 'ngo_approved' ? 'NGO Approved Loans' :
+               statusFilter === 'ngo_rejected' ? 'NGO Rejected Loans' :
+               statusFilter === 'all' ? 'All Loan Applications' :
                translations[language].loanRequests}
             </div>
           </div>

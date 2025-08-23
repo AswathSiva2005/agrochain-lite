@@ -3,7 +3,7 @@ import axios from 'axios';
 import ServiceProviderNavbar from '../../components/ServiceProviderNavbar';
 import { LanguageContext } from '../../App';
 import { motion } from 'framer-motion';
-import { FaFileAlt, FaPlus, FaCalendarAlt, FaPercentage, FaRupeeSign, FaClock, FaShieldAlt, FaGift, FaExternalLinkAlt, FaUpload, FaTimes } from 'react-icons/fa';
+import { FaFileAlt, FaPlus, FaCalendarAlt, FaPercentage, FaRupeeSign, FaClock, FaShieldAlt, FaGift, FaExternalLinkAlt, FaUpload, FaTimes, FaClipboardList, FaPercent, FaCheck, FaLink, FaFilePdf } from 'react-icons/fa';
 import { API_BASE_URL } from '../../config/api.js';
 
 function ServiceProviderLoanSchemes() {
@@ -80,7 +80,7 @@ function ServiceProviderLoanSchemes() {
         >
           <div className="d-flex align-items-center" style={{ gap: 10 }}>
             <div className="d-flex align-items-center justify-content-center" style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,.15)' }}>
-              <FaFileUpload />
+              <FaUpload />
             </div>
             <div className="h5 mb-0">Upload Loan Scheme</div>
           </div>
@@ -215,7 +215,7 @@ function ServiceProviderLoanSchemes() {
                 onMouseEnter={(e) => { e.currentTarget.style.background = '#ffc107'; e.currentTarget.style.borderColor = '#ffc107'; e.currentTarget.style.color = '#212529'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = ''; e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
               >
-                <FaFileUpload className="me-2" /> Upload Scheme
+                <FaUpload className="me-2" /> Upload Scheme
               </button>
             </div>
             {message && <div className="alert alert-info mt-2">{message}</div>}

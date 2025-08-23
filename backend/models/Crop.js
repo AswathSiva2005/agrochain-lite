@@ -9,6 +9,7 @@ const cropSchema = new mongoose.Schema({
   image: { type: String },
   address: { type: String, required: true },
   phone: { type: String, required: true },
+  cultivationDate: { type: Date, required: true },
 }, { timestamps: true });
 
 export default mongoose.model('Crop', cropSchema);
