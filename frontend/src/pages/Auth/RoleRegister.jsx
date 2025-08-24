@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { LanguageContext } from '../../App';
 import { motion } from 'framer-motion';
-import { FaUserTie, FaShoppingCart, FaHandshake, FaUserShield, FaGlobe } from 'react-icons/fa';
+import { FaUserTie, FaShoppingCart, FaHandshake, FaUserShield } from 'react-icons/fa';
 
 const translations = {
   en: {
@@ -16,7 +16,6 @@ const translations = {
     serviceProviderDesc: "Offer agricultural services",
     admin: "Admin",
     adminDesc: "Manage the platform",
-    changeLang: "தமிழ்",
     getStarted: "Get Started",
   },
   ta: {
@@ -30,7 +29,6 @@ const translations = {
     serviceProviderDesc: "விவசாய சேவைகளை வழங்கவும்",
     admin: "நிர்வாகி",
     adminDesc: "மேடையை நிர்வகிக்கவும்",
-    changeLang: "English",
     getStarted: "தொடங்குங்கள்",
   }
 };
@@ -121,14 +119,14 @@ const roleCards = [
 
 function RoleRegister() {
   const navigate = useNavigate();
-  const { language, setLanguage } = useContext(LanguageContext);
+  const { language } = useContext(LanguageContext);
 
   return (
-    <div className="role-register-container d-flex align-items-center justify-content-center">
+    <div className="role-register-container d-flex align-items-center justify-content-center min-vh-100 p-3">
       
       {/* Animated background elements */}
       <motion.div
-        className="position-absolute floating"
+        className="position-absolute floating d-none d-md-block"
         style={{
           top: '10%',
           left: '10%',
@@ -150,7 +148,7 @@ function RoleRegister() {
       />
       
       <motion.div
-        className="position-absolute floating"
+        className="position-absolute floating d-none d-md-block"
         style={{
           bottom: '20%',
           right: '15%',
@@ -171,72 +169,42 @@ function RoleRegister() {
         }}
       />
 
-      <div className="container">
-    <motion.div
-          className="text-center mb-5"
+      <div className="container-fluid">
+        <motion.div
+          className="text-center mb-4 mb-md-5"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          {/* Main Title with Language Toggle */}
-          <div className="d-flex justify-content-center align-items-center mb-3">
-            <motion.h1
-              className="display-4 fw-bold mb-0 me-4"
-              style={{ 
-                background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                textShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                letterSpacing: '2px'
-              }}
-              initial={{ opacity: 0, y: -30 }}
-      animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-    >
-              {translations[language].registerAs}
-            </motion.h1>
-            
-            {/* Language Toggle - Repositioned next to title */}
-      <motion.button
-              className="btn btn-light btn-sm"
-              style={{ 
-                borderRadius: '25px',
-                padding: '8px 16px',
-                fontSize: '14px',
-                fontWeight: '600',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-                border: 'none',
-                background: 'rgba(255,255,255,0.9)',
-                backdropFilter: 'blur(10px)',
-              }}
-        onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
-                background: 'rgba(255,255,255,1)'
-              }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400 }}
-              aria-label={`Switch to ${language === 'en' ? 'Tamil' : 'English'}`}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-            >
-              <FaGlobe className="me-2" />
-        {translations[language].changeLang}
-      </motion.button>
-          </div>
+          {/* Main Title */}
+          <motion.h1
+            className="display-5 display-md-4 fw-bold mb-3"
+            style={{ 
+              background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              letterSpacing: '1px',
+              fontSize: 'clamp(1.5rem, 4vw, 3rem)'
+            }}
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            {translations[language].registerAs}
+          </motion.h1>
           
           <motion.p
-            className="lead mb-5"
-        style={{
-              fontSize: '1.2rem',
+            className="lead mb-4"
+            style={{
+              fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
               color: '#34495e',
               fontWeight: '500',
               textShadow: '0 2px 4px rgba(255,255,255,0.8)'
             }}
             initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             {translations[language].subtitle}
@@ -245,7 +213,7 @@ function RoleRegister() {
 
         {/* Role Cards Grid */}
         <motion.div
-          className="row justify-content-center g-4"
+          className="row justify-content-center g-3 g-md-4"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -255,17 +223,18 @@ function RoleRegister() {
             return (
               <motion.div
                 key={role.id}
-                className="col-lg-3 col-md-6 col-sm-12"
+                className="col-12 col-sm-6 col-lg-3"
                 variants={cardVariants}
                 whileHover="hover"
                 whileTap="tap"
                 custom={index}
               >
-      <motion.div
+                <motion.div
                   className="card glass-card card-hover h-100 border-0 shadow-lg"
                   style={{
                     cursor: 'pointer',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    minHeight: '280px'
                   }}
                   onClick={() => navigate(role.route)}
                   whileHover={{
@@ -290,7 +259,7 @@ function RoleRegister() {
                     }}
                   >
                     <motion.div
-                      className="position-absolute"
+                      className="position-absolute d-none d-md-block"
                       style={{
                         top: '-50%',
                         left: '-50%',
@@ -323,28 +292,29 @@ function RoleRegister() {
                   </div>
 
                   {/* Card Body */}
-                  <div className="card-body text-center py-4">
+                  <div className="card-body text-center py-4 d-flex flex-column">
                     <motion.h5
                       className="card-title fw-bold mb-3"
-                      style={{ color: '#2c3e50' }}
+                      style={{ color: '#2c3e50', fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}
                       whileHover={{ scale: 1.05 }}
                     >
                       {translations[language][role.id]}
                     </motion.h5>
                     
-                    <p className="card-text text-muted mb-4" style={{ fontSize: '0.9rem' }}>
+                    <p className="card-text text-muted mb-4 flex-grow-1" style={{ fontSize: 'clamp(0.8rem, 2vw, 0.9rem)' }}>
                       {translations[language][`${role.id}Desc`]}
                     </p>
 
                     <motion.div
-                      className="btn btn-gradient w-100"
+                      className="btn btn-gradient w-100 mt-auto"
                       style={{
                         background: role.gradient,
                         border: 'none',
                         borderRadius: '25px',
                         padding: '12px',
                         fontWeight: '600',
-                        fontSize: '0.9rem'
+                        fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
+                        minHeight: '44px'
                       }}
                       whileHover={{ 
                         scale: 1.05,
@@ -355,21 +325,21 @@ function RoleRegister() {
                       {translations[language].getStarted}
                     </motion.div>
                   </div>
-      </motion.div>
-    </motion.div>
+                </motion.div>
+              </motion.div>
             );
           })}
         </motion.div>
 
         {/* Footer */}
         <motion.div
-          className="text-center mt-5"
+          className="text-center mt-4 mt-md-5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
         >
-          <p className="text-black-50" style={{ fontSize: '0.9rem' }}>
-            © 2024 AgroChain Lite. All rights reserved.
+          <p className="text-black-50" style={{ fontSize: 'clamp(0.8rem, 2vw, 0.9rem)' }}>
+            2024 AgroChain Lite. All rights reserved.
           </p>
         </motion.div>
       </div>

@@ -117,15 +117,29 @@ function FarmerRegister() {
     password: '', address: '', state: '', district: '', pincode: ''
   });
   const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState(''); // 'success', 'error', 'info'
+  const [showMessage, setShowMessage] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState('');
   const [otpVerified, setOtpVerified] = useState(false);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
+  // Enhanced message display function
+  const showNotification = (msg, type = 'info') => {
+    setMessage(msg);
+    setMessageType(type);
+    setShowMessage(true);
+    
+    // Auto-hide message after 5 seconds
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 5000);
+  };
+
   const handleSendOtp = async () => {
     if (!form.email) {
-      setMessage(translations[language].emailFirst);
+      showNotification(translations[language].emailFirst, 'error');
       return;
     }
     try {
@@ -134,41 +148,41 @@ function FarmerRegister() {
       
       // Check if we're in development mode and OTP is returned
       if (response.data.otp) {
-        setMessage(`${translations[language].otpSentSuccess} Your OTP is: ${response.data.otp} ${translations[language].devMode}`);
+        showNotification(`${translations[language].otpSentSuccess} ${translations[language].devMode}: ${response.data.otp}`, 'success');
         setOtp(response.data.otp); // Auto-fill the OTP field
       } else {
-        setMessage(translations[language].otpSent);
+        showNotification(translations[language].otpSent, 'success');
       }
     } catch (err) {
-      setMessage(err.response?.data?.message || translations[language].failedSendOtp);
+      showNotification(err.response?.data?.message || translations[language].failedSendOtp, 'error');
     }
   };
 
   const handleVerifyOtp = async () => {
     if (!form.email || !otp) {
-      setMessage(translations[language].enterEmailOtp);
+      showNotification(translations[language].enterEmailOtp, 'error');
       return;
     }
     try {
       await axios.post('https://agrochain-lite.onrender.com/api/auth/verify-otp', { email: form.email, otp });
       setOtpVerified(true);
-      setMessage(translations[language].otpVerifiedMsg);
+      showNotification(translations[language].otpVerifiedMsg, 'success');
     } catch (err) {
-      setMessage(err.response?.data?.message || translations[language].otpVerificationFailed);
+      showNotification(err.response?.data?.message || translations[language].otpVerificationFailed, 'error');
     }
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     if (!otpVerified) {
-      setMessage(translations[language].verifyOtpFirst);
+      showNotification(translations[language].verifyOtpFirst, 'error');
       return;
     }
     try {
-      await axios.post('https://agrochain-lite.onrender.com/api/auth/register-farmer', { ...form, otp });
-      setMessage(translations[language].registrationSuccess);
+      await axios.post('https://agrochain-lite.onrender.com/api/auth/register', { ...form, role: 'farmer', otp });
+      showNotification(translations[language].registrationSuccess, 'success');
     } catch (err) {
-      setMessage(err.response?.data?.message || translations[language].registrationFailed);
+      showNotification(err.response?.data?.message || translations[language].registrationFailed, 'error');
     }
   };
 
@@ -362,59 +376,198 @@ function FarmerRegister() {
                 </div>
                 
                 {/* OTP Verification */}
-                <div className="col-12">
-                  <label className="form-label fw-bold">{translations[language].otpVerification}</label>
+                <motion.div
+                  className="mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  <label className="form-label fw-bold d-flex align-items-center mb-3">
+                    <i className="fas fa-shield-alt me-2 text-primary"></i>
+                    {translations[language].otpVerification}
+                  </label>
+                  
+                  {/* Email Input and Send OTP Button */}
                   <div className="row g-2 mb-3">
-                    <div className="col-12 col-md-8">
-                      <input
+                    <div className="col-12 col-md-7">
+                      <motion.input
                         type="email"
-                        className="form-control"
+                        className={`form-control ${otpSent ? 'border-success' : ''}`}
                         placeholder={translations[language].enterEmail}
                         value={form.email}
                         name="email"
                         onChange={handleChange}
                         required
                         disabled={otpSent}
+                        style={{
+                          borderRadius: '12px',
+                          padding: '12px 16px',
+                          fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                          minHeight: '48px',
+                          border: otpSent ? '2px solid #28a745' : '2px solid #e9ecef',
+                          background: otpSent ? 'rgba(40, 167, 69, 0.1)' : 'white',
+                          transition: 'all 0.3s ease'
+                        }}
+                        whileFocus={{ 
+                          scale: 1.02,
+                          boxShadow: '0 0 0 3px rgba(13, 110, 253, 0.25)'
+                        }}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 }}
                       />
                     </div>
-                    <div className="col-12 col-md-4">
-                      <button
+                    <div className="col-12 col-md-5">
+                      <motion.button
                         type="button"
-                        className="btn btn-outline-primary w-100"
+                        className={`btn w-100 d-flex align-items-center justify-content-center gap-2 ${otpSent ? 'btn-success' : 'btn-primary'}`}
                         onClick={handleSendOtp}
                         disabled={otpSent}
+                        style={{
+                          borderRadius: '12px',
+                          padding: '12px 20px',
+                          fontWeight: '600',
+                          fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                          minHeight: '48px',
+                          border: 'none',
+                          background: otpSent 
+                            ? 'linear-gradient(135deg, #28a745, #20c997)'
+                            : 'linear-gradient(135deg, #007bff, #0056b3)',
+                          boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+                          transition: 'all 0.3s ease'
+                        }}
+                        whileHover={!otpSent ? { 
+                          scale: 1.05,
+                          boxShadow: '0 6px 20px rgba(0,0,0,0.3)'
+                        } : {}}
+                        whileTap={{ scale: 0.95 }}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 }}
                       >
-                        {translations[language].sendOtp}
-                      </button>
+                        {otpSent ? (
+                          <>
+                            <i className="fas fa-check"></i>
+                            {translations[language].otpSentSuccess}
+                          </>
+                        ) : (
+                          <>
+                            <i className="fas fa-paper-plane"></i>
+                            {translations[language].sendOtp}
+                          </>
+                        )}
+                      </motion.button>
                     </div>
                   </div>
+
+                  {/* OTP Input and Verify Button - Show only after OTP is sent */}
                   {otpSent && (
-                    <div className="row g-2 mb-3">
-                      <div className="col-12 col-md-8">
-                        <input
+                    <motion.div
+                      className="row g-2 mb-3"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    >
+                      <div className="col-12 col-md-7">
+                        <motion.input
                           type="text"
-                          className="form-control"
+                          className={`form-control ${otpVerified ? 'border-success' : ''}`}
                           placeholder={translations[language].enterOtp}
                           value={otp}
                           onChange={e => setOtp(e.target.value)}
+                          maxLength="6"
+                          style={{
+                            borderRadius: '12px',
+                            padding: '12px 16px',
+                            fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                            minHeight: '48px',
+                            border: otpVerified ? '2px solid #28a745' : '2px solid #e9ecef',
+                            background: otpVerified ? 'rgba(40, 167, 69, 0.1)' : 'white',
+                            letterSpacing: '2px',
+                            textAlign: 'center',
+                            fontWeight: '600',
+                            transition: 'all 0.3s ease'
+                          }}
+                          whileFocus={{ 
+                            scale: 1.02,
+                            boxShadow: '0 0 0 3px rgba(13, 110, 253, 0.25)'
+                          }}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 }}
                         />
                       </div>
-                      <div className="col-12 col-md-4">
-                        <button
+                      <div className="col-12 col-md-5">
+                        <motion.button
                           type="button"
-                          className="btn btn-outline-success w-100"
+                          className={`btn w-100 d-flex align-items-center justify-content-center gap-2 ${otpVerified ? 'btn-success' : 'btn-outline-success'}`}
                           onClick={handleVerifyOtp}
                           disabled={otpVerified}
+                          style={{
+                            borderRadius: '12px',
+                            padding: '12px 20px',
+                            fontWeight: '600',
+                            fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                            minHeight: '48px',
+                            border: otpVerified ? 'none' : '2px solid #28a745',
+                            background: otpVerified 
+                              ? 'linear-gradient(135deg, #28a745, #20c997)'
+                              : 'transparent',
+                            color: otpVerified ? 'white' : '#28a745',
+                            boxShadow: otpVerified ? '0 4px 15px rgba(40, 167, 69, 0.3)' : 'none',
+                            transition: 'all 0.3s ease'
+                          }}
+                          whileHover={!otpVerified ? { 
+                            scale: 1.05,
+                            background: '#28a745',
+                            color: 'white',
+                            boxShadow: '0 6px 20px rgba(40, 167, 69, 0.3)'
+                          } : {}}
+                          whileTap={{ scale: 0.95 }}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.3 }}
                         >
-                          {translations[language].verifyOtp}
-                        </button>
+                          {otpVerified ? (
+                            <>
+                              <i className="fas fa-check-double"></i>
+                              {translations[language].otpVerified}
+                            </>
+                          ) : (
+                            <>
+                              <i className="fas fa-shield-check"></i>
+                              {translations[language].verifyOtp}
+                            </>
+                          )}
+                        </motion.button>
                       </div>
-                    </div>
+                    </motion.div>
                   )}
+
+                  {/* Success Badge - Show only when OTP is verified */}
                   {otpVerified && (
-                    <div className="alert alert-success py-2 mb-3">{translations[language].otpVerified}</div>
+                    <motion.div
+                      className="alert alert-success d-flex align-items-center py-2 mb-0"
+                      style={{
+                        borderRadius: '12px',
+                        border: 'none',
+                        background: 'linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(25, 135, 84, 0.1))',
+                        borderLeft: '4px solid #28a745'
+                      }}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    >
+                      <motion.i 
+                        className="fas fa-check-circle text-success me-2"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.2, type: "spring", stiffness: 400 }}
+                      />
+                      <span className="fw-semibold text-success">{translations[language].otpVerified}</span>
+                    </motion.div>
                   )}
-                </div>
+                </motion.div>
               </div>
               
               <motion.button
@@ -437,7 +590,110 @@ function FarmerRegister() {
                 {translations[language].register}
               </motion.button>
             </form>
-            {message && <div className="alert alert-info mt-3 text-center">{message}</div>}
+            {showMessage && (
+              <motion.div
+                className={`alert alert-${messageType === 'success' ? 'success' : messageType === 'error' ? 'danger' : 'info'} d-flex align-items-center mb-4`}
+                style={{
+                  borderRadius: '15px',
+                  border: 'none',
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                  backdropFilter: 'blur(10px)',
+                  background: messageType === 'success' 
+                    ? 'linear-gradient(135deg, rgba(40, 167, 69, 0.9), rgba(25, 135, 84, 0.9))'
+                    : messageType === 'error'
+                    ? 'linear-gradient(135deg, rgba(220, 53, 69, 0.9), rgba(176, 42, 55, 0.9))'
+                    : 'linear-gradient(135deg, rgba(13, 202, 240, 0.9), rgba(11, 172, 204, 0.9))',
+                  color: 'white',
+                  fontWeight: '500',
+                  fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+                initial={{ opacity: 0, y: -20, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                {/* Animated background effect */}
+                <motion.div
+                  className="position-absolute"
+                  style={{
+                    top: 0,
+                    left: '-100%',
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+                    zIndex: 1
+                  }}
+                  animate={{
+                    left: ['100%', '100%']
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                
+                <div className="d-flex align-items-center w-100" style={{ zIndex: 2 }}>
+                  <div className="me-3">
+                    {messageType === 'success' && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
+                      >
+                        <i className="fas fa-check-circle" style={{ fontSize: '1.5rem' }}></i>
+                      </motion.div>
+                    )}
+                    {messageType === 'error' && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
+                      >
+                        <i className="fas fa-exclamation-circle" style={{ fontSize: '1.5rem' }}></i>
+                      </motion.div>
+                    )}
+                    {messageType === 'info' && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
+                      >
+                        <i className="fas fa-info-circle" style={{ fontSize: '1.5rem' }}></i>
+                      </motion.div>
+                    )}
+                  </div>
+                  
+                  <div className="flex-grow-1">
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      {message}
+                    </motion.div>
+                  </div>
+                  
+                  <motion.button
+                    type="button"
+                    className="btn-close btn-close-white ms-3"
+                    onClick={() => setShowMessage(false)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      fontSize: '1.2rem',
+                      opacity: 0.8
+                    }}
+                    whileHover={{ scale: 1.1, opacity: 1 }}
+                    whileTap={{ scale: 0.9 }}
+                    aria-label="Close notification"
+                  />
+                </div>
+              </motion.div>
+            )}
+
             <div className="mt-4 text-center">
               <hr />
               <div className="d-flex flex-column flex-sm-row align-items-center justify-content-center gap-2">
