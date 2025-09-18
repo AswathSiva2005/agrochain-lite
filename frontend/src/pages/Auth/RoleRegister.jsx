@@ -86,15 +86,17 @@ const roleCards = [
   {
     id: 'farmer',
     icon: FaUserTie,
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    // gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    gradient: 'linear-gradient(135deg, #000000 0%, #808080 100%)',
     route: '/register/farmer',
     delay: 0.1,
-    color: '#667eea'
+    color: '000000'
   },
   {
     id: 'buyer',
     icon: FaShoppingCart,
-    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    // gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    gradient: 'linear-gradient(135deg, #000000 0%, #808080 100%)',
     route: '/register/buyer',
     delay: 0.2,
     color: '#f093fb'
@@ -102,7 +104,8 @@ const roleCards = [
   {
     id: 'serviceProvider',
     icon: FaHandshake,
-    gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    // gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    gradient: 'linear-gradient(135deg, #000000 0%, #808080 100%)',
     route: '/register/service-provider',
     delay: 0.3,
     color: '#4facfe'
@@ -110,7 +113,8 @@ const roleCards = [
   {
     id: 'admin',
     icon: FaUserShield,
-    gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    // gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    gradient: 'linear-gradient(135deg, #000000 0%, #808080 100%)',
     route: '/register',
     delay: 0.4,
     color: '#43e97b'
@@ -228,6 +232,7 @@ function RoleRegister() {
                 whileHover="hover"
                 whileTap="tap"
                 custom={index}
+                
               >
                 <motion.div
                   className="card glass-card card-hover h-100 border-0 shadow-lg"
